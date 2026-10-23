@@ -1,0 +1,1649 @@
+{
+    "players": [
+        {
+            "id": 0,
+            "age": 23,
+            "name": "Manui",
+            "deck": "2",
+            "nationality": {
+                "id": 0,
+                "name": "Portuguese",
+                "country": "Portugal",
+                "iso": "pt-pt"
+            },
+            "position": {
+                "id": 5,
+                "name": "Striker"
+            },
+            "action": {
+                "id": 0,
+                "name": "No action"
+            },
+            "overall": 13,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 7
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 15
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 14
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 12
+                }
+            }
+        },
+        {
+            "id": 1,
+            "age": 33,
+            "name": "Bello Tutto",
+            "deck": "2",
+            "nationality": {
+                "id": 1,
+                "name": "Italian",
+                "country": "Italy",
+                "iso": "it-it"
+            },
+            "position": {
+                "id": 4,
+                "name": "Offensive Midfielder"
+            },
+            "action": {
+                "id": 1,
+                "name": "No action"
+            },
+            "overall": 12,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 6
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 9
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 9
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 14
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 17
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 15
+                }
+            }
+        },
+        {
+            "id": 2,
+            "age": 27,
+            "name": "Anto Mann",
+            "deck": "2",
+            "nationality": {
+                "id": 2,
+                "name": "French",
+                "country": "France",
+                "iso": "fr-fr"
+            },
+            "position": {
+                "id": 3,
+                "name": "Midfielder"
+            },
+            "action": {
+                "id": 2,
+                "name": "If tied, wins the duel"
+            },
+            "overall": 15,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 10
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 15
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 14
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 14
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 15
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 12
+                }
+            }
+        },
+        {
+            "id": 3,
+            "age": 23,
+            "name": "Martin",
+            "deck": "2",
+            "nationality": {
+                "id": 3,
+                "name": "Spanish",
+                "country": "Spain",
+                "iso": "es-es"
+            },
+            "position": {
+                "id": 1,
+                "name": "Defender"
+            },
+            "action": {
+                "id": 3,
+                "name": "If there's another Spanish player on the field, gain +1"
+            },
+            "overall": 13,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 15
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 14
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 6
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 12
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 14
+                }
+            }
+        },
+        {
+            "id": 4,
+            "age": 19,
+            "name": "Helguero",
+            "deck": "2",
+            "nationality": {
+                "id": 3,
+                "name": "Spanish",
+                "country": "Spain",
+                "iso": "es-es"
+            },
+            "position": {
+                "id": 5,
+                "name": "Striker"
+            },
+            "action": {
+                "id": 4,
+                "name": "If the coach doesn't have the token, lose 1 point"
+            },
+            "overall": 12,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 6
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 14
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 14
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 14
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 14
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 10
+                }
+            }
+        },
+        {
+            "id": 5,
+            "age": 29,
+            "name": "Notto",
+            "deck": "2",
+            "nationality": {
+                "id": 1,
+                "name": "Italian",
+                "country": "Italy",
+                "iso": "it-it"
+            },
+            "position": {
+                "id": 4,
+                "name": "Offensive Midfielder"
+            },
+            "action": {
+                "id": 5,
+                "name": "If you win, the opponent's coach must discard a card from their hand"
+            },
+            "overall": 12,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 11
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 9
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 12
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 14
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 14
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 14
+                }
+            }
+        },
+        {
+            "id": 6,
+            "age": 25,
+            "name": "Barett",
+            "deck": "2",
+            "nationality": {
+                "id": 4,
+                "name": "English",
+                "country": "England",
+                "iso": "gb-en"
+            },
+            "position": {
+                "id": 3,
+                "name": "Midfielder"
+            },
+            "action": {
+                "id": 6,
+                "name": "Nullifies the opponent's additional points"
+            },
+            "overall": 13,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 17
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 14
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 11
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 12
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 15
+                }
+            }
+        },
+        {
+            "id": 7,
+            "age": 21,
+            "name": "Ballit",
+            "deck": "2",
+            "nationality": {
+                "id": 5,
+                "name": "American",
+                "country": "USA",
+                "iso": "us-en"
+            },
+            "position": {
+                "id": 1,
+                "name": "Defender"
+            },
+            "action": {
+                "id": 7,
+                "name": "No action"
+            },
+            "overall": 14,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 17
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 14
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 8
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 13
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 10
+                }
+            }
+        },
+        {
+            "id": 8,
+            "age": 35,
+            "name": "Caldela",
+            "deck": "2",
+            "nationality": {
+                "id": 6,
+                "name": "Mexican",
+                "country": "Mexico",
+                "iso": "mx-mx"
+            },
+            "position": {
+                "id": 5,
+                "name": "Striker"
+            },
+            "action": {
+                "id": 8,
+                "name": "If you lose, return to the player's hand"
+            },
+            "overall": 12,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 7
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 9
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 9
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 16
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 15
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 18
+                }
+            }
+        },
+        {
+            "id": 9,
+            "age": 26,
+            "name": "Roman Ver",
+            "deck": "2",
+            "nationality": {
+                "id": 7,
+                "name": "Argentine",
+                "country": "Argentina",
+                "iso": "ar-ar"
+            },
+            "position": {
+                "id": 4,
+                "name": "Offensive Midfielder"
+            },
+            "action": {
+                "id": 9,
+                "name": "If you win, draw a special card at the end of the duel"
+            },
+            "overall": 14,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 9
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 12
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 14
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 15
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 13
+                }
+            }
+        },
+        {
+            "id": 10,
+            "age": 20,
+            "name": "Pedrinho",
+            "deck": "2",
+            "nationality": {
+                "id": 8,
+                "name": "Brazilian",
+                "country": "Brazil",
+                "iso": "br-br"
+            },
+            "position": {
+                "id": 3,
+                "name": "Midfielder"
+            },
+            "action": {
+                "id": 10,
+                "name": "Out of position, does not lose points (only for Defence and Offensive Midfielder)"
+            },
+            "overall": 13,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 12
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 16
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 13
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 15
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 8
+                }
+            }
+        },
+        {
+            "id": 11,
+            "age": 26,
+            "name": "Tomiaso",
+            "deck": "2",
+            "nationality": {
+                "id": 1,
+                "name": "Italian",
+                "country": "Italy",
+                "iso": "it-it"
+            },
+            "position": {
+                "id": 1,
+                "name": "Defender"
+            },
+            "action": {
+                "id": 11,
+                "name": "At the end of the duel, the token goes to your coach"
+            },
+            "overall": 16,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 20
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 17
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 14
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 5
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 6
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 18
+                }
+            }
+        },
+        {
+            "id": 12,
+            "age": 30,
+            "name": "Andra Martic",
+            "deck": "2",
+            "nationality": {
+                "id": 9,
+                "name": "Croatian",
+                "country": "Croatia",
+                "iso": "hr-hr"
+            },
+            "position": {
+                "id": 5,
+                "name": "Striker"
+            },
+            "action": {
+                "id": 12,
+                "name": "If playing with brother Marto Martic, gain +2"
+            },
+            "overall": 11,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 6
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 15
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 13
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 15
+                }
+            }
+        },
+        {
+            "id": 13,
+            "age": 30,
+            "name": "Marto Martic",
+            "deck": "2",
+            "nationality": {
+                "id": 9,
+                "name": "Croatian",
+                "country": "Croatia",
+                "iso": "hr-hr"
+            },
+            "position": {
+                "id": 4,
+                "name": "Offensive Midfielder"
+            },
+            "action": {
+                "id": 13,
+                "name": "If playing with brother Andra Martic, gain +2"
+            },
+            "overall": 12,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 10
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 15
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 11
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 15
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 11
+                }
+            }
+        },
+        {
+            "id": 14,
+            "age": 22,
+            "name": "Vax",
+            "deck": "2",
+            "nationality": {
+                "id": 10,
+                "name": "German",
+                "country": "Germany",
+                "iso": "de-de"
+            },
+            "position": {
+                "id": 3,
+                "name": "Midfielder"
+            },
+            "action": {
+                "id": 14,
+                "name": "Can swap the duel before players are revealed"
+            },
+            "overall": 14,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 12
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 15
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 10
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 13
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 14
+                }
+            }
+        },
+        {
+            "id": 15,
+            "age": 22,
+            "name": "Jitaz",
+            "deck": "2",
+            "nationality": {
+                "id": 6,
+                "name": "Mexican",
+                "country": "Mexico",
+                "iso": "mx-mx"
+            },
+            "position": {
+                "id": 1,
+                "name": "Defender"
+            },
+            "action": {
+                "id": 15,
+                "name": "No action"
+            },
+            "overall": 12,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 14
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 15
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 6
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 13
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 12
+                }
+            }
+        },
+        {
+            "id": 16,
+            "age": 30,
+            "name": "Larisso",
+            "deck": "2",
+            "nationality": {
+                "id": 11,
+                "name": "Chilean",
+                "country": "Chile",
+                "iso": "cl-cl"
+            },
+            "position": {
+                "id": 5,
+                "name": "Striker"
+            },
+            "action": {
+                "id": 16,
+                "name": "No action"
+            },
+            "overall": 13,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 6
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 14
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 14
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 12
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 12
+                }
+            }
+        },
+        {
+            "id": 17,
+            "age": 26,
+            "name": "Gliff",
+            "deck": "2",
+            "nationality": {
+                "id": 12,
+                "name": "English",
+                "country": "England",
+                "iso": "gb-gb"
+            },
+            "position": {
+                "id": 4,
+                "name": "Offensive Midfielder"
+            },
+            "action": {
+                "id": 17,
+                "name": "No action"
+            },
+            "overall": 13,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 10
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 15
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 11
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 14
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 14
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 15
+                }
+            }
+        },
+        {
+            "id": 18,
+            "age": 24,
+            "name": "Mandova",
+            "deck": "2",
+            "nationality": {
+                "id": 1,
+                "name": "Italian",
+                "country": "Italy",
+                "iso": "it-it"
+            },
+            "position": {
+                "id": 3,
+                "name": "Midfielder"
+            },
+            "action": {
+                "id": 18,
+                "name": "No action"
+            },
+            "overall": 13,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 16
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 12
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 11
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 14
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 14
+                }
+            }
+        },
+        {
+            "id": 19,
+            "age": 31,
+            "name": "Tossard",
+            "deck": "2",
+            "nationality": {
+                "id": 13,
+                "name": "Belgian",
+                "country": "Belgium",
+                "iso": "be-be"
+            },
+            "position": {
+                "id": 1,
+                "name": "Defender"
+            },
+            "action": {
+                "id": 19,
+                "name": "No action"
+            },
+            "overall": 11,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 14
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 12
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 8
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 13
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 16
+                }
+            }
+        },
+        {
+            "id": 20,
+            "age": 21,
+            "name": "Vimmel",
+            "deck": "2",
+            "nationality": {
+                "id": 14,
+                "name": "Dutch",
+                "country": "Netherlands",
+                "iso": "nl-nl"
+            },
+            "position": {
+                "id": 5,
+                "name": "Striker"
+            },
+            "action": {
+                "id": 20,
+                "name": "No action"
+            },
+            "overall": 13,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 8
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 16
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 13
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 16
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 12
+                }
+            }
+        },
+        {
+            "id": 21,
+            "age": 29,
+            "name": "Otomars",
+            "deck": "2",
+            "nationality": {
+                "id": 14,
+                "name": "Dutch",
+                "country": "Netherlands",
+                "iso": "nl-nl"
+            },
+            "position": {
+                "id": 4,
+                "name": "Offensive Midfielder"
+            },
+            "action": {
+                "id": 21,
+                "name": "Draw 2 special cards, choose one for yourself and one for the opponent"
+            },
+            "overall": 14,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 8
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 14
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 16
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 13
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 16
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 11
+                }
+            }
+        },
+        {
+            "id": 22,
+            "age": 26,
+            "name": "Obi Manu",
+            "deck": "2",
+            "nationality": {
+                "id": 15,
+                "name": "Nigerian",
+                "country": "Nigeria",
+                "iso": "ng-ng"
+            },
+            "position": {
+                "id": 3,
+                "name": "Midfielder"
+            },
+            "action": {
+                "id": 22,
+                "name": "At the end of the duel, gain +1 if opponent played a defender"
+            },
+            "overall": 15,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 14
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 16
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 15
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 15
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 17
+                }
+            }
+        },
+        {
+            "id": 23,
+            "age": 28,
+            "name": "Mik",
+            "deck": "2",
+            "nationality": {
+                "id": 6,
+                "name": "Croatian",
+                "country": "Croatia",
+                "iso": "hr-hr"
+            },
+            "position": {
+                "id": 1,
+                "name": "Goalkeeper"
+            },
+            "action": {
+                "id": 0,
+                "name": "No action"
+            },
+            "overall": 13,
+            "atributes": {
+                "defending": {
+                    "type": "goalkeeping",
+                    "value": 11
+                },
+                "physical": {
+                    "type": "goalkeeping",
+                    "value": 13
+                },
+                "pace": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "shooting": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "dribbling": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "passing": {
+                    "type": "goalkeeping",
+                    "value": 0
+                }
+            }
+        },
+        {
+            "id": 24,
+            "age": 22,
+            "name": "Vaio",
+            "deck": "2",
+            "nationality": {
+                "id": 3,
+                "name": "Brazilian",
+                "country": "Brazil",
+                "iso": "pt-br"
+            },
+            "position": {
+                "id": 1,
+                "name": "Goalkeeper"
+            },
+            "action": {
+                "id": 0,
+                "name": "No action"
+            },
+            "overall": 11,
+            "atributes": {
+                "defending": {
+                    "type": "goalkeeping",
+                    "value": 14
+                },
+                "physical": {
+                    "type": "goalkeeping",
+                    "value": 14
+                },
+                "pace": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "shooting": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "dribbling": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "passing": {
+                    "type": "goalkeeping",
+                    "value": 0
+                }
+            }
+        },
+        {
+            "id": 25,
+            "age": 29,
+            "name": "Rafa",
+            "deck": "2",
+            "nationality": {
+                "id": 7,
+                "name": "Portuguese",
+                "country": "Portugal",
+                "iso": "pt-pt"
+            },
+            "position": {
+                "id": 1,
+                "name": "Goalkeeper"
+            },
+            "action": {
+                "id": 1,
+                "name": "If younger than opponent, gain +1"
+            },
+            "overall": 14,
+            "atributes": {
+                "defending": {
+                    "type": "goalkeeping",
+                    "value": 14
+                },
+                "physical": {
+                    "type": "goalkeeping",
+                    "value": 15
+                },
+                "pace": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "shooting": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "dribbling": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "passing": {
+                    "type": "goalkeeping",
+                    "value": 0
+                }
+            }
+        },
+        {
+            "id": 26,
+            "age": 24,
+            "name": "John Sights",
+            "deck": "2",
+            "nationality": {
+                "id": 8,
+                "name": "English",
+                "country": "England",
+                "iso": "en-gb"
+            },
+            "position": {
+                "id": 1,
+                "name": "Goalkeeper"
+            },
+            "action": {
+                "id": 2,
+                "name": "In case of tie, game moves to midfield"
+            },
+            "overall": 13,
+            "atributes": {
+                "defending": {
+                    "type": "goalkeeping",
+                    "value": 10
+                },
+                "physical": {
+                    "type": "goalkeeping",
+                    "value": 16
+                },
+                "pace": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "shooting": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "dribbling": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "passing": {
+                    "type": "goalkeeping",
+                    "value": 0
+                }
+            }
+        },
+        {
+            "id": 27,
+            "age": 28,
+            "name": "Joelinton",
+            "deck": "2",
+            "nationality": {
+                "id": 3,
+                "name": "Brazilian",
+                "country": "Brazil",
+                "iso": "pt-br"
+            },
+            "position": {
+                "id": 1,
+                "name": "Goalkeeper"
+            },
+            "action": {
+                "id": 0,
+                "name": "No action"
+            },
+            "overall": 11,
+            "atributes": {
+                "defending": {
+                    "type": "goalkeeping",
+                    "value": 12
+                },
+                "physical": {
+                    "type": "goalkeeping",
+                    "value": 11
+                },
+                "pace": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "shooting": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "dribbling": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "passing": {
+                    "type": "goalkeeping",
+                    "value": 0
+                }
+            }
+        },
+        {
+            "id": 28,
+            "age": 20,
+            "name": "Manolas",
+            "deck": "2",
+            "nationality": {
+                "id": 4,
+                "name": "Spanish",
+                "country": "Spain",
+                "iso": "es-es"
+            },
+            "position": {
+                "id": 1,
+                "name": "Goalkeeper"
+            },
+            "action": {
+                "id": 0,
+                "name": "No action"
+            },
+            "overall": 14,
+            "atributes": {
+                "defending": {
+                    "type": "goalkeeping",
+                    "value": 14
+                },
+                "physical": {
+                    "type": "goalkeeping",
+                    "value": 14
+                },
+                "pace": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "shooting": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "dribbling": {
+                    "type": "goalkeeping",
+                    "value": 0
+                },
+                "passing": {
+                    "type": "goalkeeping",
+                    "value": 0
+                }
+            }
+        },
+        {
+            "id": 29,
+            "age": 25,
+            "name": "Ron Kaku",
+            "deck": "2",
+            "nationality": {
+                "id": 5,
+                "name": "Belgian",
+                "country": "Belgium",
+                "iso": "nl-be"
+            },
+            "position": {
+                "id": 2,
+                "name": "Defender"
+            },
+            "action": {
+                "id": 3,
+                "name": "When loses a duel, can return to the hand of the coach"
+            },
+            "overall": 14,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 13
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 16
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 15
+                },
+                "shooting": {
+                    "type": "defence",
+                    "value": 10
+                },
+                "dribbling": {
+                    "type": "defence",
+                    "value": 0
+                },
+                "passing": {
+                    "type": "defence",
+                    "value": 0
+                }
+            }
+        },
+        {
+            "id": 30,
+            "age": 31,
+            "name": "Joey Anters",
+            "deck": "2",
+            "nationality": {
+                "id": 8,
+                "name": "English",
+                "country": "England",
+                "iso": "en-gb"
+            },
+            "position": {
+                "id": 2,
+                "name": "Defender"
+            },
+            "action": {
+                "id": 4,
+                "name": "Removes a special card when revealed in the duel"
+            },
+            "overall": 13,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 17
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 12
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 12
+                },
+                "shooting": {
+                    "type": "defence",
+                    "value": 6
+                },
+                "dribbling": {
+                    "type": "defence",
+                    "value": 0
+                },
+                "passing": {
+                    "type": "defence",
+                    "value": 0
+                }
+            }
+        },
+        {
+            "id": 31,
+            "age": 30,
+            "name": "Moors",
+            "deck": "2",
+            "nationality": {
+                "id": 5,
+                "name": "Belgian",
+                "country": "Belgium",
+                "iso": "nl-be"
+            },
+            "position": {
+                "id": 3,
+                "name": "Midfielder"
+            },
+            "action": {
+                "id": 5,
+                "name": "Can swap the duel once per game"
+            },
+            "overall": 15,
+            "atributes": {
+                "defending": {
+                    "type": "midfield",
+                    "value": 11
+                },
+                "physical": {
+                    "type": "midfield",
+                    "value": 13
+                },
+                "pace": {
+                    "type": "midfield",
+                    "value": 12
+                },
+                "shooting": {
+                    "type": "midfield",
+                    "value": 12
+                },
+                "dribbling": {
+                    "type": "midfield",
+                    "value": 18
+                },
+                "passing": {
+                    "type": "midfield",
+                    "value": 0
+                }
+            }
+        },
+        {
+            "id": 32,
+            "age": 22,
+            "name": "Cantano Diez",
+            "deck": "2",
+            "nationality": {
+                "id": 9,
+                "name": "Argentine",
+                "country": "Argentina",
+                "iso": "es-ar"
+            },
+            "position": {
+                "id": 3,
+                "name": "Midfielder"
+            },
+            "action": {
+                "id": 6,
+                "name": "If team is losing, can always remain on the field"
+            },
+            "overall": 13,
+            "atributes": {
+                "defending": {
+                    "type": "midfield",
+                    "value": 13
+                },
+                "physical": {
+                    "type": "midfield",
+                    "value": 19
+                },
+                "pace": {
+                    "type": "midfield",
+                    "value": 13
+                },
+                "shooting": {
+                    "type": "midfield",
+                    "value": 5
+                },
+                "dribbling": {
+                    "type": "midfield",
+                    "value": 13
+                },
+                "passing": {
+                    "type": "midfield",
+                    "value": 0
+                }
+            }
+        },
+        {
+            "id": 33,
+            "age": 33,
+            "name": "Trincic",
+            "deck": "2",
+            "nationality": {
+                "id": 6,
+                "name": "Croatian",
+                "country": "Croatia",
+                "iso": "hr-hr"
+            },
+            "position": {
+                "id": 4,
+                "name": "Attacking Midfielder"
+            },
+            "action": {
+                "id": 0,
+                "name": "No action"
+            },
+            "overall": 13,
+            "atributes": {
+                "defending": {
+                    "type": "midfield",
+                    "value": 12
+                },
+                "physical": {
+                    "type": "midfield",
+                    "value": 11
+                },
+                "pace": {
+                    "type": "midfield",
+                    "value": 12
+                },
+                "shooting": {
+                    "type": "midfield",
+                    "value": 13
+                },
+                "dribbling": {
+                    "type": "midfield",
+                    "value": 16
+                },
+                "passing": {
+                    "type": "midfield",
+                    "value": 0
+                }
+            }
+        },
+        {
+            "id": 34,
+            "age": 27,
+            "name": "Mic Upio",
+            "deck": "2",
+            "nationality": {
+                "id": 10,
+                "name": "Dutch",
+                "country": "Netherlands",
+                "iso": "nl-nl"
+            },
+            "position": {
+                "id": 5,
+                "name": "Forward"
+            },
+            "action": {
+                "id": 7,
+                "name": "Against an opponent of the same nationality, loses 1 point"
+            },
+            "overall": 12,
+            "atributes": {
+                "defending": {
+                    "type": "attack",
+                    "value": 6
+                },
+                "physical": {
+                    "type": "attack",
+                    "value": 14
+                },
+                "pace": {
+                    "type": "attack",
+                    "value": 13
+                },
+                "shooting": {
+                    "type": "attack",
+                    "value": 14
+                },
+                "dribbling": {
+                    "type": "attack",
+                    "value": 13
+                },
+                "passing": {
+                    "type": "attack",
+                    "value": 0
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,282 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+}
+
+#cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    background-image: url('resources/background-player.svg');
+    background-size: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: white;
+    width: 6cm;
+    height: 9cm;
+    margin: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    -webkit-print-color-adjust: exact;
+    &.back-d1{
+        /* background-image: url('resources/background-deck1.svg'); */
+            background: linear-gradient(160deg, #e00e31, #630519);
+    }
+    
+        &.back-d2{
+            /* background-image: url('resources/background-deck2.svg'); */
+                background: linear-gradient(160deg, #242fa7, #121953);
+        }
+
+         &.back-special{
+            /* background-image: url('resources/background-deck2.svg'); */
+                background: linear-gradient(160deg, #60531a, #362c00);
+        }
+
+        &.back-duel-field{
+            /* background-image: url('resources/background-deck2.svg'); */
+                background: linear-gradient(160deg, #26601a, #105f00);
+        }
+
+        &.back-duel-goal{
+            /* background-image: url('resources/background-deck2.svg'); */
+                background: linear-gradient(160deg, #0a3f00, #000000);
+        }
+
+        &.back-coach{
+            /* background-image: url('resources/background-deck2.svg'); */
+                background: linear-gradient(160deg, #b96f00, #362100);
+        }
+
+        &.back-d1 .gradient{
+            background: rgba(0, 0, 0, 0.2);
+    }
+    
+        &.back-d2 .gradient{
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+         &.back-special .gradient{
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        &.back-duel-field .gradient{
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        &.back-duel-goal .gradient{
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        &.back-coach .gradient{
+            background: rgba(0, 0, 0, 0.2);
+        }
+}
+
+.card .gradient{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    /* background-color: rgba(0, 0, 0, 0.2); */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.64) 0%, rgba(0, 0, 0, 0.2) 100%);
+    border-radius: 12px;
+}
+
+.card .gradient.back{
+    overflow: hidden;
+    img{
+        width: 200%;
+        height: auto;
+        object-fit: cover;
+    }
+}
+
+.card-header {
+    text-align: left;
+    position: relative;
+}
+
+.card-header h2 {
+    font-size: 1.5em;
+    margin: 0;
+    max-width: calc(100% - 40px);
+}
+
+.card-header div {
+    margin: 5px 0;
+    max-width: calc(100% - 40px);
+}
+
+.nationality-flag {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.stripe {
+    position: absolute;
+    top: 0;
+    left: 30px;
+    width: 60px;
+    height: 100%;
+    background: white;
+}
+
+.stripe .deck.d2{
+    color: #242fa7;
+    transform: rotate(-90deg);
+
+}
+
+.stripe .deck.d1{
+    color: #e00e31;
+    transform: rotate(-90deg);
+}
+
+ /* .card.back-d1 .nationality-flag, .card.back-d2 .nationality-flag,.card.back-coach .nationality-flag {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        } */
+
+.card-body, .card-footer{
+    position: relative;
+}
+
+.card-body .overall {
+    text-transform: uppercase;
+    font-size: 0.875em;
+    font-weight: 600;
+        margin-top: 6px;
+    margin-bottom: 16px;
+}
+
+.card-body .overall span {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: #F5C842;
+}
+
+.attributes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 10px;
+    font-size: 0.8em;
+}
+
+.attributes p {
+    margin: 0;
+    font-weight: 700;
+}
+
+.defence {
+    display: flex;
+    flex-wrap: wrap;
+    color: #f47c3c;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.defence span {
+    color: #fff;
+    flex: 0 0 100%;
+    font-weight: 600;
+    font-size: 1.25em;
+}
+
+.offence {
+    display: flex;
+    flex-wrap: wrap;
+    color: #5599ff;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.offence span {
+    color: #fff;
+    flex: 0 0 100%;
+    font-weight: 600;
+    font-size: 1.25em;
+}
+
+.card-footer .action {
+    text-align: center;
+    font-weight: 700;
+}
+
+
+@media print {
+    body{
+        padding: 0;
+    }
+    .card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+
+        background-image: url('resources/background-player.svg');
+        background-size: cover;
+        border-radius: 12px;
+        color: white;
+        width: 6cm;
+        height: 9cm;
+        margin: 10px;
+        padding: 16px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+
+       &.back-d1{
+        /* background-image: url('resources/background-deck1.svg'); */
+            background: linear-gradient(160deg, #C41E3A, #4a0a18);
+            
+    }
+    
+        &.back-d2{
+            /* background-image: url('resources/background-deck2.svg'); */
+                background: linear-gradient(160deg, #1a2060, #0A0E2A);
+        }
+
+        /* &.back-d1 .nationality-flag, &.back-d2 .nationality-flag,&.back-coach .nationality-flag {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        } */
+
+        &.back-special{
+            /* background-image: url('resources/background-deck2.svg'); */
+                background: linear-gradient(160deg, #60531a, #362c00);
+        }
+
+        &.back-duel-field{
+            /* background-image: url('resources/background-deck2.svg'); */
+                background: linear-gradient(160deg, #26601a, #105f00);
+        }
+
+        &.back-duel-goal{
+            /* background-image: url('resources/background-deck2.svg'); */
+                background: linear-gradient(160deg, #0a3f00, #000000);
+        }
+
+        &.back-coach{
+            /* background-image: url('resources/background-deck2.svg'); */
+                background: linear-gradient(160deg, #b96f00, #362100);
+        }
+    }
+  }

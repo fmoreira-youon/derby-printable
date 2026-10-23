@@ -1,0 +1,326 @@
+{
+    "nationalities": [
+        {
+            "id": 0,
+            "name": "Portuguese",
+            "country": "Portugal",
+            "iso": "pt-pt",
+            "flag": "pt.svg"
+        },
+        {
+            "id": 1,
+            "name": "Brazilian",
+            "country": "Brazil",
+            "iso": "br-br",
+            "flag": "br.svg"
+        },
+        {
+            "id": 2,
+            "name": "Spanish",
+            "country": "Spain",
+            "iso": "es-es",
+            "flag": "es.svg"
+        },
+        {
+            "id": 3,
+            "name": "French",
+            "country": "France",
+            "iso": "fr-fr",
+            "flag": "fr.svg"
+        },
+        {
+            "id": 4,
+            "name": "German",
+            "country": "Germany",
+            "iso": "de-de",
+            "flag": "de.svg"
+        },
+        {
+            "id": 5,
+            "name": "Italian",
+            "country": "Italy",
+            "iso": "it-it",
+            "flag": "it.svg"
+        },
+        {
+            "id": 6,
+            "name": "English",
+            "country": "England",
+            "iso": "en-en",
+            "flag": "en.svg"
+        },
+        {
+            "id": 7,
+            "name": "Dutch",
+            "country": "Netherlands",
+            "iso": "nl-nl",
+            "flag": "nl.svg"
+        },
+        {
+            "id": 8,
+            "name": "Belgian",
+            "country": "Belgium",
+            "iso": "be-be",
+            "flag": "be.svg"
+        },
+        {
+            "id": 9,
+            "name": "Swiss",
+            "country": "Switzerland",
+            "iso": "ch-ch",
+            "flag": "ch.svg"
+        },
+        {
+            "id": 10,
+            "name": "Argentinian",
+            "country": "Argentina",
+            "iso": "ar-ar",
+            "flag": "ar.svg"
+        },
+        {
+            "id": 11,
+            "name": "Uruguayan",
+            "country": "Uruguay",
+            "iso": "uy-uy",
+            "flag": "uy.svg"
+        },
+        {
+            "id": 12,
+            "name": "Chilean",
+            "country": "Chile",
+            "iso": "cl-cl",
+            "flag": "cl.svg"
+        },
+        {
+            "id": 13,
+            "name": "Colombian",
+            "country": "Colombia",
+            "iso": "co-co",
+            "flag": "co.svg"
+        },
+        {
+            "id": 14,
+            "name": "Mexican",
+            "country": "Mexico",
+            "iso": "mx-mx",
+            "flag": "mx.svg"
+        },
+        {
+            "id": 15,
+            "name": "American",
+            "country": "United States",
+            "iso": "us-us",
+            "flag": "us.svg"
+        },
+        {
+            "id": 16,
+            "name": "Canadian",
+            "country": "Canada",
+            "iso": "ca-ca",
+            "flag": "ca.svg"
+        },
+        {
+            "id": 17,
+            "name": "Australian",
+            "country": "Australia",
+            "iso": "au-au",
+            "flag": "au.svg"
+        },
+        {
+            "id": 18,
+            "name": "Japanese",
+            "country": "Japan",
+            "iso": "jp-jp",
+            "flag": "jp.svg"
+        },
+        {
+            "id": 19,
+            "name": "South Korean",
+            "country": "South Korea",
+            "iso": "kr-kr",
+            "flag": "kr.svg"
+        },
+        {
+            "id": 20,
+            "name": "Chinese",
+            "country": "China",
+            "iso": "cn-cn",
+            "flag": "cn.svg"
+        },
+        {
+            "id": 21,
+            "name": "Russian",
+            "country": "Russia",
+            "iso": "ru-ru",
+            "flag": "ru.svg"
+        },
+        {
+            "id": 22,
+            "name": "Ukrainian",
+            "country": "Ukraine",
+            "iso": "ua-ua",
+            "flag": "ua.svg"
+        },
+        {
+            "id": 23,
+            "name": "Polish",
+            "country": "Poland",
+            "iso": "pl-pl",
+            "flag": "pl.svg"
+        },
+        {
+            "id": 24,
+            "name": "Czech",
+            "country": "Czech Republic",
+            "iso": "cz-cz",
+            "flag": "cz.svg"
+        },
+        {
+            "id": 25,
+            "name": "Slovak",
+            "country": "Slovakia",
+            "iso": "sk-sk",
+            "flag": "sk.svg"
+        },
+        {
+            "id": 26,
+            "name": "Hungarian",
+            "country": "Hungary",
+            "iso": "hu-hu",
+            "flag": "hu.svg"
+        },
+        {
+            "id": 27,
+            "name": "Romanian",
+            "country": "Romania",
+            "iso": "ro-ro",
+            "flag": "ro.svg"
+        },
+        {
+            "id": 28,
+            "name": "Bulgarian",
+            "country": "Bulgaria",
+            "iso": "bg-bg",
+            "flag": "bg.svg"
+        },
+        {
+            "id": 29,
+            "name": "Greek",
+            "country": "Greece",
+            "iso": "gr-gr",
+            "flag": "gr.svg"
+        },
+        {
+            "id": 30,
+            "name": "Turkish",
+            "country": "Turkey",
+            "iso": "tr-tr",
+            "flag": "tr.svg"
+        },
+        {
+            "id": 31,
+            "name": "Egyptian",
+            "country": "Egypt",
+            "iso": "eg-eg",
+            "flag": "eg.svg"
+        },
+        {
+            "id": 32,
+            "name": "South African",
+            "country": "South Africa",
+            "iso": "za-za",
+            "flag": "za.svg"
+        },
+        {
+            "id": 33,
+            "name": "Nigerian",
+            "country": "Nigeria",
+            "iso": "ng-ng",
+            "flag": "ng.svg"
+        },
+        {
+            "id": 34,
+            "name": "Ghanaian",
+            "country": "Ghana",
+            "iso": "gh-gh",
+            "flag": "gh.svg"
+        },
+        {
+            "id": 35,
+            "name": "Ivorian",
+            "country": "Ivory Coast",
+            "iso": "ci-ci",
+            "flag": "ci.svg"
+        },
+        {
+            "id": 36,
+            "name": "Senegalese",
+            "country": "Senegal",
+            "iso": "sn-sn",
+            "flag": "sn.svg"
+        },
+        {
+            "id": 37,
+            "name": "Cameroonian",
+            "country": "Cameroon",
+            "iso": "cm-cm",
+            "flag": "cm.svg"
+        },
+        {
+            "id": 38,
+            "name": "Algerian",
+            "country": "Algeria",
+            "iso": "dz-dz",
+            "flag": "dz.svg"
+        },
+        {
+            "id": 39,
+            "name": "Moroccan",
+            "country": "Morocco",
+            "iso": "ma-ma",
+            "flag": "ma.svg"
+        },
+        {
+            "id": 40,
+            "name": "Tunisian",
+            "country": "Tunisia",
+            "iso": "tn-tn",
+            "flag": "tn.svg"
+        },
+        {
+            "id": 41,
+            "name": "Saudi Arabian",
+            "country": "Saudi Arabia",
+            "iso": "sa-sa",
+            "flag": "sa.svg"
+        },
+        {
+            "id": 42,
+            "name": "Emirati",
+            "country": "United Arab Emirates",
+            "iso": "ae-ae",
+            "flag": "ae.svg"
+        },
+        {
+            "id": 43,
+            "name": "Qatari",
+            "country": "Qatar",
+            "iso": "qa-qa",
+            "flag": "qa.svg"
+        },
+        {
+            "id": 44,
+            "name": "Kuwaiti",
+            "country": "Kuwait",
+            "iso": "kw-kw",
+            "flag": "kw.svg"
+        },
+        {
+            "id": 45,
+            "name": "Omani",
+            "country": "Oman",
+            "iso": "om-om",
+            "flag": "om.svg"
+        }
+    ]
+}

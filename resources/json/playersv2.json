@@ -1,0 +1,39 @@
+{
+    "players": [
+        {
+            "id": 0,
+            "age": 25,
+            "name": "Nicolau Madail",
+            "id_nationality": 0,
+            "id_position": 5,
+            "id_action": 12,
+            "overall": 15,
+            "atributes": {
+                "defending": {
+                    "type": "defence",
+                    "value": 15
+                },
+                "physical": {
+                    "type": "defence",
+                    "value": 15
+                },
+                "pace": {
+                    "type": "defence",
+                    "value": 15
+                },
+                "shooting": {
+                    "type": "offence",
+                    "value": 15
+                },
+                "dribbling": {
+                    "type": "offence",
+                    "value": 15
+                },
+                "passing": {
+                    "type": "offence",
+                    "value": 15
+                }
+            }
+        }
+    ]
+}
