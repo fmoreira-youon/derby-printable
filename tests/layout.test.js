@@ -23,3 +23,26 @@ for(const paper of ['a3','a4']) {
    for(let y=0;y<310;y++)for(let x=0;x<380;x++)assert.ok(tiles.some(t=>x>=t.x&&x<t.x+t.width&&y>=t.y&&y<t.y+t.height));
  });
 }
+
+import {COACHES,DUELS,FIELD_DUELS,GOAL_DUELS,SPECIALS,SPECIAL_CARDS} from '../data/collections.js';
+import {matchTokens,tokenOrder,tokenArt} from '../artwork.js';
+test('collections preserve seed counts, copy quantities and action associations',()=>{
+ assert.equal(COACHES.length,7);assert.equal(FIELD_DUELS.length,50);assert.equal(GOAL_DUELS.length,40);assert.equal(DUELS.length,90);assert.equal(SPECIAL_CARDS.length,30);
+ assert.match(COACHES[0].action.description,/empatado/);assert.match(COACHES[6].action.description,/automaticamente/);
+ for(const s of SPECIALS)assert.equal(SPECIAL_CARDS.filter(c=>c.name===s.name).length,s.quantity);
+ for(const duel of DUELS)assert.equal(duel.duelAttributes.length,2);
+});
+test('exact match token set: 10 substitutions, one Derby and one ball',()=>{
+ const tokens=matchTokens();assert.equal(tokens.length,12);
+ assert.equal(tokens.filter(t=>t.type==='sub').length,10);
+ assert.equal(tokens.filter(t=>t.type==='derby').length,1);
+ assert.equal(tokens.filter(t=>t.type==='ball').length,1);
+ assert.equal(tokenArt('sub',false),tokenArt('sub',true));
+ assert.equal(tokenArt('ball',false),tokenArt('ball',true));
+ assert.notEqual(tokenArt('derby',false),tokenArt('derby',true));
+ assert.match(tokenArt('derby',false),/derby-logo.png/);
+});
+for(const edge of ['long','short'])test(`token backs register for ${edge}-edge binding`,()=>{
+ const tokens=matchTokens();assert.deepEqual(tokenOrder(tokenOrder(tokens,edge),edge),tokens);
+ assert.equal(tokenOrder(tokens,edge)[0].id,tokens[edge==='long'?5:6].id);
+});

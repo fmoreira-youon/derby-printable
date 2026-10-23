@@ -1,11 +1,16 @@
 import { DECK1_PLAYERS, DECK2_PLAYERS } from './data/decks.js';
+import { COACHES, DUELS, SPECIAL_CARDS } from './data/collections.js';
+import { logo, tokenArt, matchTokens, tokenOrder } from './artwork.js';
 import { gridFor, paginate, reverseSheet, boardTiles } from './layout.js';
 
 const views = {
   blue: { title: 'Default blue deck', route: '/print/decks/blue', players: DECK2_PLAYERS, color: 'blue' },
   red: { title: 'Default red deck', route: '/print/decks/red', players: DECK1_PLAYERS, color: 'red' },
   board: { title: 'The pitch', route: '/print/board' },
-  tokens: { title: 'Match tokens', route: '/print/tokens' }
+  tokens: { title: 'Match tokens', route: '/print/tokens' },
+  coaches: { title: 'Coaches', route: '/print/coaches', cards: COACHES, type:'coach' },
+  duels: { title: 'Duels', route: '/print/duels', cards: DUELS, type:'duel' },
+  specials: { title: 'Special cards', route: '/print/specials', cards: SPECIAL_CARDS, type:'special' }
 };
 const positions = { GOALKEEPER:'Goalkeeper', DEFENSE:'Defense', MIDFIELD:'Midfield', ATTACKING_MIDFIELD:'Attacking midfield', ATTACK:'Attack' };
 const flags = { PT:'portugal', IT:'italia', FR:'franca', ES:'espanha', EN:'inglaterra', DE:'alemanha', AR:'argentina', BR:'brasil', US:'eua', MX:'mexico', BE:'belgica', NL:'holanda', CZ:'republica-checa', CL:'chile', CI:'costa-marfim', HR:'croacia', NG:'nigeria' };
@@ -14,6 +19,7 @@ const form = document.querySelector('#options');
 const sheets = document.querySelector('#sheets');
 const initialSide = new URLSearchParams(location.search).get('side');
 if (['front','back'].includes(initialSide)) form.elements.sides.value = initialSide;
+let playerOptions = {};
 let currentView, ready = Promise.resolve(), generation = 0;
 
 function card(player, color, back, rotate) {
@@ -21,17 +27,17 @@ function card(player, color, back, rotate) {
   const a = player.attributes;
   const attributes = player.position === 'GOALKEEPER'
     ? [['Physical',a.physicality],['Technique',a.technique],['Handling',a.handling],['Reflexes',a.reflexes],['Mental',a.mental],['Exits',a.exits]]
-    : [['Physical',a.physicality],['Technique',a.technique],['Tackling',a.tackle],['Pace',a.pace],['Mental',a.mental],['Finishing',a.finishing]];
+    : [['Physical',a.physicality],['Technique',a.technique],['Tackling',a.tackle],['Pace',a.pace],['Mental',a.mental],['Shooting',a.finishing]];
   const flag = flags[player.nationality];
-  return `<div class="card-space"><article class="playing-card ${color} ${back?'card-back':''} ${rotate?'rotate':''}">
-  ${back ? `<div class="back-stripe"></div><div class="back-brand">DERBY<small>THE CARD GAME</small></div><span class="back-team">${color.toUpperCase()} TEAM</span>` : `
-  <header><span class="card-number">${escape(player.nationality)} · ${player.age} YEARS</span>${flag?`<img class="flag" src="resources/flags/${flag}.svg" alt="${escape(player.nationality)}">`:''}<h3>${escape(player.name)}</h3><p>${positions[player.position]}</p></header>
+  return `<div class="card-space" data-card-id="${escape(player.name)}"><article class="playing-card player-card ${color} ${back?'card-back':''} ${rotate?'rotate':''} ${!back&&playerOptions.background==='stadium'?'stadium':''}">
+  ${back ? `<div class="back-stripe"></div><div class="back-brand">${logo()}</div><span class="back-team">${color.toUpperCase()} TEAM</span>${playerOptions.nationality?`<div class="back-nationality">${flag?`<img src="resources/flags/${flag}.svg" alt="">`:""}<span>${escape(player.nationality)}</span></div>`:""}` : `
+  ${playerOptions.background==='stadium'?'<img class="stadium-art" src="resources/stadium.jpg" alt="">':''}<header><span class="card-number">${escape(player.nationality)} · ${player.age} YEARS</span>${flag?`<img class="flag" src="resources/flags/${flag}.svg" alt="${escape(player.nationality)}">`:''}<h3>${escape(player.name)}</h3><p>${positions[player.position]}</p></header>
   <div class="card-middle"><div class="overall"><span>OVERALL</span><b>${a.overall}</b></div><div class="attributes">${attributes.map(([label,value])=>`<div><span>${label}</span><b>${value}</b></div>`).join('')}</div></div>
-  <div class="ability">${escape(player.action?.description || '—')}</div><footer>DERBY <span>${color.toUpperCase()} / ${String(currentView.players.indexOf(player)+1).padStart(2,'0')}</span></footer>`}
+  <div class="ability ${player.action?'':'no-ability'}">${escape(player.action?.description || '')}</div>`}
   </article></div>`;
 }
 function page(content, label, paper) {
-  return `<section class="sheet ${paper}" aria-label="${escape(label)}"><div class="sheet-label">DERBY / ${escape(label)}</div>${content}<div class="sheet-bottom"><span>${escape(label)}</span><span class="ruler">50 mm</span></div></section>`;
+  return `<section class="sheet ${paper}" aria-label="${escape(label)}"><div class="sheet-label">${logo()}<span>${escape(label)}</span></div>${content}<div class="sheet-bottom"><span>${escape(label)}</span><span class="ruler">50 mm</span></div></section>`;
 }
 function renderDeck(view, options) {
   const {paper,sides,edge} = options, {columns} = gridFor(paper);
@@ -44,56 +50,80 @@ function renderDeck(view, options) {
 }
 function pitch() {
   const labels = ['Goalkeeper','Defense','Midfield','Attacking midfield','Attack'];
-  return `<div class="pitch"><div class="pitch-line"></div><div class="pitch-circle"></div><div class="pitch-brand">DERBY <span>BLUE → &nbsp; MATCH PITCH &nbsp; ← RED</span></div>${labels.map((name,i)=>`<div class="pitch-column" style="left:${10+i*72}mm"><div class="slot red-slot"><span>${labels[4-i]}</span></div><div class="slot duel-slot"><span>DUEL ${i+1}</span></div><div class="slot blue-slot"><span>${name}</span></div></div>`).join('')}<div class="pitch-end">PRINT & PLAY · 380 × 310 mm</div></div>`;
+  return `<div class="pitch"><div class="pitch-line"></div><div class="pitch-circle"></div><div class="pitch-brand">${logo()} <span>BLUE → &nbsp; MATCH PITCH &nbsp; ← RED</span></div>${labels.map((name,i)=>`<div class="pitch-column" style="left:${10+i*72}mm"><div class="slot red-slot"><span>${labels[4-i]}</span></div><div class="slot duel-slot"><span>DUEL ${i+1}</span></div><div class="slot blue-slot"><span>${name}</span></div></div>`).join('')}<div class="pitch-end">PRINT & PLAY · 380 × 310 mm</div></div>`;
 }
 function renderBoard(paper) {
   return boardTiles(paper).map((t,i)=>page(`<div class="tile" style="width:${t.width}mm;height:${t.height}mm"><div class="tile-art" style="left:-${t.x}mm;top:-${t.y}mm">${pitch()}</div></div><p class="assembly">Tile ${i+1} · ${paper==='a4'?'2 × 2 layout: 1 2 / 3 4':'Top / bottom: 1 / 2'} · overlap matching artwork by 10 mm.</p>`,`Pitch · tile ${i+1}`,paper)).join('');
 }
-function tokenIcon(type) {
-  const shapes = {
-    star:'<path d="m50 12 11 25 27 3-20 18 6 27-24-14-24 14 6-27-20-18 27-3Z" fill="currentColor"/>',
-    ball:'<circle cx="50" cy="50" r="31" fill="white" stroke="currentColor" stroke-width="3"/><path d="m50 34 16 12-6 19H40l-6-19Z M50 19v15 M21 40l13 6 M29 74l11-9 M71 74 60 65 M79 40l-13 6" fill="currentColor" stroke="currentColor" stroke-width="4"/>',
-    sub:'<path d="M20 36h55L60 21 M80 64H25l15 15" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>'
-  };
-  return `<svg viewBox="0 0 100 100" aria-hidden="true">${shapes[type]}</svg>`;
+function renderTokens(paper,sides,edge) {
+  const tokens=matchTokens();
+  return (sides==='both'?['front','back']:[sides]).map(side=>{
+    const back=side==='back', ordered=back?tokenOrder(tokens,edge):tokens;
+    return page(`<div class="token-grid">${ordered.map(t=>`<div class="token-cell ${back&&edge==='short'?'rotate':''}" data-token-id="${t.id}">${tokenArt(t.type,back)}<small>${t.label}</small></div>`).join('')}</div>`,`Tokens · ${side}`,paper);
+  }).join('');
 }
-function renderTokens(paper,subs) {
-  const tokens = [{type:'star',label:'DERBY STAR',color:'gold'},{type:'ball',label:'BALL',color:'neutral'},...['blue','red'].flatMap(color=>Array.from({length:subs},(_,i)=>({type:'sub',label:`${color.toUpperCase()} ${i+1}`,color})))];
-  const capacity = paper==='a4'?30:60;
-  return Array.from({length:Math.ceil(tokens.length/capacity)},(_,i)=>page(`<div class="token-grid">${tokens.slice(i*capacity,(i+1)*capacity).map(t=>`<div class="token-cell"><div class="token ${t.color}">${tokenIcon(t.type)}</div><small>${t.label}</small></div>`).join('')}</div>`,`Tokens · sheet ${i+1}`,paper)).join('');
+const attributeNames={physicality:'Physical',technique:'Technique',pace:'Pace',tackle:'Tackling',mental:'Mental',finishing:'Shooting',overall:'Overall',exits:'Exits',handling:'Handling',reflexes:'Reflexes'};
+function collectionCard(item,type,back,rotate) {
+  if(!item) return '<div class="card-space"></div>';
+  const kind=type==='duel'?(item.kind==='GOAL'?'goal':'field'):type;
+  const label=type==='duel'?`${kind.toUpperCase()} DUEL`:type==='coach'?'COACH':'SPECIAL';
+  let body;
+  if(back) body=`<div class="back-brand">${logo()}</div><span class="back-team">${label}</span>`;
+  else if(type==='duel') body=`<header><p class="category">${label}</p><h3>${escape(item.name)}</h3></header><div class="duel-attributes"><strong>${attributeNames[item.duelAttributes[0]]}</strong><span>VS</span><strong>${attributeNames[item.duelAttributes[1]]}</strong></div><div class="collection-action">${escape(item.action?.description||'')}</div>`;
+  else body=`<header><p class="category">${label}</p><h3>${escape(item.name)}</h3></header><div class="collection-symbol">${type==='coach'?'⌁':'✦'}</div><div class="collection-action">${escape(item.action?.description||item.description||'')}</div>`;
+  return `<div class="card-space"><article class="playing-card collection-card ${kind} ${back?'card-back':''} ${rotate?'rotate':''}">${body}</article></div>`;
+}
+function renderCollection(view,{paper,sides,edge,duelKind}) {
+  const cards=view.type==='duel'&&duelKind!=='all'?view.cards.filter(c=>c.kind===duelKind):view.cards;
+  const {columns}=gridFor(paper);
+  return paginate(cards,paper).flatMap((items,i)=>(sides==='both'?['front','back']:[sides]).map(side=>{
+    const back=side==='back',ordered=back?reverseSheet(items,paper,edge):items;
+    return page(`<div class="card-grid" style="--columns:${columns}">${ordered.map(c=>collectionCard(c,view.type,back,back&&edge==='short')).join('')}</div>`,`${view.title} · sheet ${i+1} · ${side}`,paper);
+  })).join('');
 }
 async function assetsReady() {
   await document.fonts.ready;
-  await Promise.all([...sheets.querySelectorAll('img')].map(async img=>{ await img.decode(); }));
+  const images=[...document.querySelectorAll('img')];
+  await Promise.all(images.map(img=>new Promise((resolve,reject)=>{
+    if(img.complete) { img.naturalWidth ? resolve() : reject(new Error(img.src)); return; }
+    img.addEventListener('load',resolve,{once:true});
+    img.addEventListener('error',()=>reject(new Error(img.src)),{once:true});
+  })));
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
 }
 function render() {
   const id = ++generation;
   const path = location.hash.slice(1).replace(/\/$/,'') || '/print';
   currentView = Object.values(views).find(v=>v.route===path);
   const home = path==='/print';
-  document.querySelector('#navigation').innerHTML = Object.values(views).map((v,i)=>`<a class="nav-card ${currentView===v?'active':''}" href="#${v.route}" ${currentView===v?'aria-current="page"':''}><span>0${i+1}</span><strong>${v.title}</strong><small>${v.players?`${v.players.length} player cards`:i===2?'Five zones. One match.':'Star, ball & substitutions'}</small></a>`).join('');
+  document.querySelector('#navigation').innerHTML = Object.values(views).map((v,i)=>`<a class="nav-card ${currentView===v?'active':''}" href="#${v.route}" ${currentView===v?'aria-current="page"':''}><span>0${i+1}</span><strong>${v.title}</strong><small>${v.players?`${v.players.length} player cards`:v.cards?`${v.cards.length} cards`:v===views.board?'Five zones. One match.':'12 tokens · fronts + backs'}</small></a>`).join('');
   const view = currentView;
   document.querySelector('.workspace').hidden = !view;
   document.querySelector('#error').hidden = true;
   sheets.innerHTML = '';
   if (!view) {
+    document.title='DERBY — Print & Play';
     if (!home) sheets.innerHTML='<p class="empty">Print page not found. Choose a component above.</p>';
     return;
   }
   document.title = `DERBY — ${view.title}`;
   const data = new FormData(form), paper=data.get('paper'), sides=data.get('sides'), edge=data.get('edge');
-  const subs = Math.min(30,Math.max(0,Math.floor(Number(data.get('subs')) || 0)));
-  document.body.className = `${paper} ${view.players?'deck-view':view===views.board?'board-view':'tokens-view'} ${data.has('marks')?'cut-marks':''}`;
-  document.querySelectorAll('.deck-option').forEach(el=>el.hidden=!view.players);
-  document.querySelector('.token-option').hidden=view!==views.tokens;
+  playerOptions={background:data.get('background'),nationality:data.has('nationality')};
+  const duplex=view!==views.board;
+  const isCards=Boolean(view.players||view.cards);
+  const options={paper,sides,edge,duelKind:data.get('duelKind')};
+  document.body.className = `${paper} ${isCards?'deck-view':view===views.board?'board-view':'tokens-view'} ${data.has('marks')?'cut-marks':''}`;
+  document.querySelectorAll('.duplex-option').forEach(el=>el.hidden=!duplex);
+  document.querySelectorAll('.player-option').forEach(el=>el.hidden=!view.players);
+  document.querySelector('.duel-option').hidden=view!==views.duels;
   document.querySelector('#view-title').textContent=view.title;
-  document.querySelector('#print-help').textContent=view.players
+  document.querySelector('#print-help').textContent=isCards
     ? 'Portrait. For fronts + backs, print double-sided using the selected binding edge. Test the first pair of sheets before printing the full deck. Ability text is preserved in Portuguese from the game data.'
     : view===views.board ? `${paper==='a3'?'A3 landscape · 2 sheets':'A4 portrait · 4 sheets'}. Trim the blank margins, then align the repeated artwork with a 10 mm overlap. Final pitch: 380 × 310 mm. Slots fit 63 × 88 mm cards.`
-    : 'Portrait. Print single-sided. Tokens are 25 mm in diameter. Cut the circles and glue to card. The substitution quantity is a printing preference, not a rule limit.';
-  const content = view.players ? renderDeck(view,{paper,sides,edge}) : view===views.board ? renderBoard(paper) : renderTokens(paper,subs);
+    : 'Portrait. 12 tokens: 10 substitutions, 1 Derby star and 1 ball. Print double-sided with the selected binding. Derby logo on the star front, star on its back; other tokens match on both sides. Test the first sheet before cutting the 25 mm circles.';
+  const content = view.players ? renderDeck(view,options) : view.cards ? renderCollection(view,options) : view===views.board ? renderBoard(paper) : renderTokens(paper,sides,edge);
   sheets.innerHTML=content;
-  document.querySelector('#status').textContent=`${sheets.children.length} printed pages · ${paper.toUpperCase()} · ${view.players?'63 × 88 mm cards':view===views.board?'Full-size pitch':'25 mm tokens'}`;
+  document.querySelector('#status').textContent=`${sheets.children.length} printed pages · ${paper.toUpperCase()} · ${isCards?'63 × 88 mm cards':view===views.board?'Full-size pitch':'25 mm tokens'}`;
   const button = document.querySelector('#print-button'); button.disabled=true;
   document.querySelector('#status').textContent+=' · Preparing artwork…';
   // Named pages keep paper size and orientation in browser-generated PDFs.

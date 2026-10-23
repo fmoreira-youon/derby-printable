@@ -4,7 +4,7 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DERBY — Print & Play</title><link rel="stylesheet" href="print.css">
 </head><body>
-<header class="site-header"><a href="#/print" class="brand">DERBY<span>PRINT & PLAY</span></a><span class="edition">THE GAME. AT YOUR TABLE.</span></header>
+<header class="site-header"><a href="#/print" class="brand"><img class="derby-logo" src="resources/derby-logo.png" alt="DERBY — The Card Game"><span>PRINT & PLAY</span></a><span class="edition">THE GAME. AT YOUR TABLE.</span></header>
 <main>
 <section class="intro"><p class="eyebrow">BUILD YOUR MATCHDAY</p><h1>From the screen.<br><em>To your table.</em></h1><p>Print your teams, assemble the pitch and bring DERBY home.</p></section>
 <nav aria-label="Print components" id="navigation"></nav>
@@ -12,9 +12,11 @@
 <div class="workspace-heading"><div><p class="eyebrow">PRINT STUDIO</p><h2 id="view-title"></h2></div><button id="print-button" disabled>Print / Save PDF ↗</button></div>
 <form id="options">
 <label>Paper<select name="paper"><option value="a3">A3 · more per sheet</option><option value="a4">A4 · home printer</option></select></label>
-<label class="deck-option">Sides<select name="sides"><option value="both">Fronts + backs · duplex</option><option value="front">Fronts only</option><option value="back">Backs only</option></select></label>
-<label class="deck-option">Duplex binding<select name="edge"><option value="long">Long edge</option><option value="short">Short edge</option></select></label>
-<label class="token-option" hidden>Substitution tokens per team<input name="subs" type="number" min="0" max="30" value="3"></label>
+<label class="duplex-option">Sides<select name="sides"><option value="both">Fronts + backs · duplex</option><option value="front">Fronts only</option><option value="back">Backs only</option></select></label>
+<label class="duplex-option">Duplex binding<select name="edge"><option value="long">Long edge</option><option value="short">Short edge</option></select></label>
+<label class="player-option">Front background<select name="background"><option value="stadium">Stadium</option><option value="plain">Plain · less ink</option></select></label>
+<label class="player-option check"><input name="nationality" type="checkbox" checked> Nationality on player backs</label>
+<label class="duel-option" hidden>Duel deck<select name="duelKind"><option value="all">Field + goal · 90 cards</option><option value="FIELD">Field · 50 cards</option><option value="GOAL">Goal · 40 cards</option></select></label>
 <label class="check"><input name="marks" type="checkbox" checked> Cut guides</label>
 </form>
 <p id="status" role="status" aria-live="polite"></p>

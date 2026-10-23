@@ -1,72 +1,91 @@
 # DERBY Print & Play
 
-Dependency-free print studio. Run `npm run dev` and open http://localhost:4173.
-Use `npm test` for deck integrity, duplex registration and board coverage checks.
+Run `npm run dev`, then open http://localhost:4173. Uses Node.js only, with no
+package installation, build step, API, CDN or account. Run `npm test` for tests.
 
 ## Routes
 
-Static-host-compatible hash routes work on GitHub Pages, including project subpaths:
+Static-host-compatible hash routes also work under a GitHub Pages project path:
 
-- `index.html#/print` — component chooser
-- `index.html#/print/decks/blue` — default blue players (36)
-- `index.html#/print/decks/red` — default red players (36)
-- `index.html#/print/board` — five zones, each with red player, duel and blue player slots
-- `index.html#/print/tokens` — Derby star, ball and configurable substitutions
+| Route (after `index.html`) | Contents |
+| --- | --- |
+| `#/print` | Component chooser |
+| `#/print/decks/blue` | 36 default blue players |
+| `#/print/decks/red` | 36 default red players |
+| `#/print/board` | Five zones, each with red player, duel and blue player slots |
+| `#/print/tokens` | 10 substitutions, 1 Derby star, 1 ball |
+| `#/print/coaches` | 7 coaches |
+| `#/print/duels` | 50 field + 40 goal duels, with deck filter |
+| `#/print/specials` | 30 cards, including repeated copies from the source |
 
-No server rewrites, CDN scripts, backend, account or build step are required.
-The legacy `front.html` and `back.html` entrypoints redirect to the blue deck with the corresponding side selected.
+Legacy `front.html` / `back.html` open the corresponding blue-deck side.
 
-## Printing
+## Physical printing
 
-Cards use an explicit border-box size of 63 × 88 mm. A3 portrait fits 4 × 4
-cards with 3 mm gutters; A4 portrait fits 3 × 3. Every sheet uses a fixed grid,
-including blank positions on the last sheet. For duplex printing, pages alternate
-front/back. Long-edge binding mirrors columns; short-edge binding mirrors rows
-and rotates back artwork 180 degrees. For manual duplex, print fronts and backs
-separately, keeping the original page order and matching the printer feed direction.
-Always test a pair first: printer feed offsets cannot be eliminated in CSS.
+Cards are exactly 63 × 88 mm, including their borders. A3 portrait fits 16
+cards (4 × 4); A4 portrait fits 9 (3 × 3). Gaps are 3 mm. Choose fronts, backs
+or interleaved front/back pairs. Long-edge binding mirrors columns; short-edge
+binding mirrors rows and rotates back artwork 180 degrees. Blank positions on
+incomplete sheets are preserved for correct registration.
 
-Use Print / Save PDF (the browser print dialog), actual size / 100%, backgrounds on,
-headers and footers off, and the selected paper size/orientation. The 50 mm ruler
-checks scale. The dotted guides sit 1 mm outside the card edge; cut at the actual
-card boundary, using the guides to locate it. This is a home-print layout, without
-professional bleed. Leave at least 7.5 mm printable margins for A4 card sheets.
+Use **100% / Actual size**, background graphics on, browser headers/footers off,
+and the selected paper size/orientation. Check the 50 mm ruler. Print / Save PDF
+opens the browser print dialog. Test a front/back pair first: printer feed
+registration varies. For manual duplex, print fronts and backs separately in
+matching order, following the printer's paper-feed direction.
 
-The assembled pitch is 380 × 310 mm, with fifteen full-size 63 × 88 mm slots.
-It prints on **two A3 landscape** pages (top/bottom), or **four A4 portrait**
-pages (top left, top right, bottom left, bottom right). Each join repeats 10 mm
-of artwork. Trim blank paper, align the repeated art, then tape/glue the overlap.
-A single A3 cannot fit three rows of 88 mm cards plus labels and safe margins;
-shrinking the board would make the card spaces too small.
+Dotted guides sit 1 mm outside the card edge. Cut the actual card boundary,
+using the guides to locate it. This is a home-print layout without professional
+bleed. A4 card sheets require no more than 7.5 mm side margins.
 
-Tokens are 25 mm diameter, single-sided. Default output is one star, one ball,
-and three substitutions per team; the latter is a configurable print quantity,
-not a declared game rule. A4 is generally sufficient for tokens.
+The pitch assembles to 380 × 310 mm, with fifteen full-size card slots. Print
+on **two A3 landscape sheets** (top/bottom), or **four A4 portrait sheets**
+(top left, top right, bottom left, bottom right). Each join repeats 10 mm of
+artwork: trim blank paper, align the repeated artwork, then tape/glue the overlap.
+A single A3 cannot fit three 88 mm card rows plus labels and safe margins.
 
-## Data and scope
+Tokens are 25 mm diameter. Exactly 12 physical tokens are supplied, with 12
+fronts and 12 registered backs. Substitution and ball faces match; the Derby
+star has the Derby logo on its front and a star on its reverse. All ten
+substitutions use the same yellow reference design.
 
-`data/decks.js` is a snapshot of `DECK1_PLAYERS` (red) and `DECK2_PLAYERS` (blue)
-from `fmoreira-youon/derby-digital`, branch `fase2-game-engine`, commit
-`ce66655cd4b971e9f42fa5341f0ac848784d4fe2`,
-`backend/src/seeds/cardsData.ts`. Statistics use the explicit current attribute
-names; goalkeeper cards show handling, reflexes and exits. Ability descriptions
-remain verbatim in Portuguese from that source. Change the snapshot to update
-printable data; printing has no live API dependency.
+## Player card options
 
-The studio includes the **player portion** of the default decks. Special cards,
-coaches and duel cards are not included in this first version. Consequently this
-is not yet a complete playable kit. The pitch follows the game engine's five
-zones; the labels on the red side are mirrored for the opposing player.
-Token symbols and card backs are provisional vector/CSS artwork. Replace them
-with approved original designs before calling this the final physical edition.
+- Stadium (default) or plain background for lower ink use.
+- Nationality on/off on backs for chemistry. Showing it reveals nationality
+  while the card is face down, so select the option appropriate to your game.
+- Larger ability text; orange/blue attribute columns with labels above values.
+- No card footer, freeing space for ability text. Page identification remains
+  outside the cut cards.
 
-The existing flags are reused. This lightweight package excludes the unused
-31 MB background-player.svg and obsolete JSON files. They remain in the original repository.
+## Sources and fidelity
 
-## Files
+Based on `new-version` at `87b72a6`, preserving its text fixes and pitch labels.
 
-- `app.js`: routes, shared renderers, controls and image readiness
-- `layout.js`: physical pagination, duplex order and tile coordinates
-- `print.css`: screen studio and physical print layouts
-- `data/decks.js`: one source for both decks
-- `tests/layout.test.js`: Node's built-in test runner, no installation required
+Player data in `data/decks.js` comes from `derby-digital/fase2-game-engine`,
+`backend/src/seeds/cardsData.ts`. `data/collections.js` contains a snapshot of
+`duelTypesSeed.ts`, `specialsSeed.ts`, and the seven coach/action associations
+in `coachService.ts` and `actionService.ts`. Repeated duel entries and special
+quantities are preserved. The rule text remains verbatim in Portuguese; no
+rule descriptions were translated or inferred. These are source snapshots,
+not queries of the live game database.
+
+The original white Derby logo was recovered from the earlier DERBY UI source.
+`resources/stadium.jpg` is the JPEG sourced from the
+previous `background-player.svg`. It is optimized to 1400 pixels wide for the 63 × 88 mm card face.
+The supplied player reference guided the typography and attribute layout.
+
+Substitution and ball tokens use the supplied original PNG reference, clipped
+in the page without redrawing the artwork. The reference is about 120 pixels
+across per token; vector originals would improve final print sharpness.
+The Derby token uses the original logo on its front and a gold star on its back.
+
+## Main files
+
+- `app.js`: routes, shared card layouts, controls and image readiness
+- `artwork.js`: logo and token artwork, token set and duplex order
+- `layout.js`: card pagination, duplex order and board tile coordinates
+- `print.css`: screen UI and physical print dimensions
+- `data/`: player and collection snapshots
+- `server.mjs`: local Node.js static server
+- `tests/layout.test.js`: data counts, pagination, token faces and registration
