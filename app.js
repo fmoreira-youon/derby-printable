@@ -24,7 +24,7 @@ function card(player, color, back, rotate) {
     : [['Physical',a.physicality],['Technique',a.technique],['Tackling',a.tackle],['Pace',a.pace],['Mental',a.mental],['Finishing',a.finishing]];
   const flag = flags[player.nationality];
   return `<div class="card-space"><article class="playing-card ${color} ${back?'card-back':''} ${rotate?'rotate':''}">
-  ${back ? `<div class="back-stripe"></div><div class="back-brand">DERBY<small>FOOTBALL TRADING CARD GAME</small></div><span class="back-team">${color.toUpperCase()} TEAM</span>` : `
+  ${back ? `<div class="back-stripe"></div><div class="back-brand">DERBY<small>THE CARD GAME</small></div><span class="back-team">${color.toUpperCase()} TEAM</span>` : `
   <header><span class="card-number">${escape(player.nationality)} · ${player.age} YEARS</span>${flag?`<img class="flag" src="resources/flags/${flag}.svg" alt="${escape(player.nationality)}">`:''}<h3>${escape(player.name)}</h3><p>${positions[player.position]}</p></header>
   <div class="card-middle"><div class="overall"><span>OVERALL</span><b>${a.overall}</b></div><div class="attributes">${attributes.map(([label,value])=>`<div><span>${label}</span><b>${value}</b></div>`).join('')}</div></div>
   <div class="ability">${escape(player.action?.description || '—')}</div><footer>DERBY <span>${color.toUpperCase()} / ${String(currentView.players.indexOf(player)+1).padStart(2,'0')}</span></footer>`}
@@ -44,7 +44,7 @@ function renderDeck(view, options) {
 }
 function pitch() {
   const labels = ['Goalkeeper','Defense','Midfield','Attacking midfield','Attack'];
-  return `<div class="pitch"><div class="pitch-line"></div><div class="pitch-circle"></div><div class="pitch-brand">DERBY <span>BLUE → &nbsp; MATCH PITCH &nbsp; ← RED</span></div>${labels.map((name,i)=>`<div class="pitch-column" style="left:${10+i*72}mm"><div class="slot red-slot"><span>RED · ${labels[4-i]}</span></div><div class="slot duel-slot"><span>DUEL ${i+1}</span></div><div class="slot blue-slot"><span>BLUE · ${name}</span></div></div>`).join('')}<div class="pitch-end">PRINT & PLAY · 380 × 310 mm</div></div>`;
+  return `<div class="pitch"><div class="pitch-line"></div><div class="pitch-circle"></div><div class="pitch-brand">DERBY <span>BLUE → &nbsp; MATCH PITCH &nbsp; ← RED</span></div>${labels.map((name,i)=>`<div class="pitch-column" style="left:${10+i*72}mm"><div class="slot red-slot"><span>${labels[4-i]}</span></div><div class="slot duel-slot"><span>DUEL ${i+1}</span></div><div class="slot blue-slot"><span>${name}</span></div></div>`).join('')}<div class="pitch-end">PRINT & PLAY · 380 × 310 mm</div></div>`;
 }
 function renderBoard(paper) {
   return boardTiles(paper).map((t,i)=>page(`<div class="tile" style="width:${t.width}mm;height:${t.height}mm"><div class="tile-art" style="left:-${t.x}mm;top:-${t.y}mm">${pitch()}</div></div><p class="assembly">Tile ${i+1} · ${paper==='a4'?'2 × 2 layout: 1 2 / 3 4':'Top / bottom: 1 / 2'} · overlap matching artwork by 10 mm.</p>`,`Pitch · tile ${i+1}`,paper)).join('');
