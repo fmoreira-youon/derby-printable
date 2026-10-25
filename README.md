@@ -68,7 +68,7 @@ Player data in `data/decks.js` comes from `derby-digital/fase2-game-engine`,
 `backend/src/seeds/cardsData.ts`. `data/collections.js` contains a snapshot of
 `duelTypesSeed.ts`, `specialsSeed.ts`, and the seven coach/action associations
 in `coachService.ts` and `actionService.ts`. Repeated duel entries and special
-quantities are preserved. All card titles and ability/effect text are translated into English; proper
+quantities are preserved. Print language can be English (default) or Portuguese. Titles and ability/effect text use the selected language; proper
 names, attributes, triggers and copy quantities are preserved. These are source snapshots,
 not queries of the live game database.
 
@@ -97,7 +97,7 @@ The Derby token uses the original logo on its front and a gold star on its back.
 Coaches use solid dark navy, a tactical clipboard icon and framed backs.
 Field duels use green, with a distinct solid green for goal duels. Attributes appear
 once in the central matchup, and effects use larger type beneath it.
-Special cards use gold with a clear title and larger effect text,
+Special cards use a luminous gold gradient with dark text, a clear title and larger effect text,
 without a decorative star. Card dimensions and source rules are unchanged.
 
 ## Print everything
@@ -113,3 +113,12 @@ A3 PDFs combine portrait card/token pages with landscape pitch pages; save
 as PDF first, then print at actual size with automatic page orientation.
 A4 uses portrait throughout. The complete duplex kit is 36 PDF pages in A3
 or 56 in A4, including intentional blank pitch reverses.
+
+## Print language
+
+Choose **Print language → English / Português** on any print route, including
+`#/print/all`. The choice applies to both player decks, coaches, duels, special
+cards, backs, token captions and pitch positions. Navigation and print controls
+remain in English. Portuguese copy is kept in `data/locales.js`, recovered from
+the original game snapshots, alongside the shared English data. Statistics,
+triggers and quantities use one data source. Proper names remain unchanged.

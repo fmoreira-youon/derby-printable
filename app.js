@@ -1,3 +1,4 @@
+import { translate } from './data/locales.js';
 import { DECK1_PLAYERS, DECK2_PLAYERS } from './data/decks.js';
 import { COACHES, DUELS, SPECIAL_CARDS } from './data/collections.js';
 import { logo, tokenArt, matchTokens, tokenOrder, tokenSlots } from './artwork.js';
@@ -20,6 +21,8 @@ const form = document.querySelector('#options');
 const sheets = document.querySelector('#sheets');
 const initialSide = new URLSearchParams(location.search).get('side');
 if (['front','back'].includes(initialSide)) form.elements.sides.value = initialSide;
+let language = 'en';
+const tr = text => translate(text, language);
 let playerOptions = {};
 let currentView, ready = Promise.resolve(), generation = 0;
 
@@ -31,13 +34,14 @@ function card(player, color, back, rotate) {
     : [['Physical',a.physicality],['Technique',a.technique],['Tackling',a.tackle],['Pace',a.pace],['Mental',a.mental],['Shooting',a.finishing]];
   const flag = flags[player.nationality];
   return `<div class="card-space" data-card-id="${escape(player.name)}"><article class="playing-card player-card ${color} ${back?'card-back':''} ${rotate?'rotate':''} ${!back&&playerOptions.background==='stadium'?'stadium':''}">
-  ${back ? `<div class="back-stripe"></div><div class="back-brand">${logo()}</div>${playerOptions.deckName?`<span class="back-team">${escape(playerOptions.deckTitle)}</span>`:''}${playerOptions.nationality?`<div class="back-nationality">${flag?`<img src="resources/flags/${flag}.svg" alt="">`:""}<span>${escape(player.nationality)}</span></div>`:""}` : `
-  ${playerOptions.background==='stadium'?'<img class="stadium-art" src="resources/stadium.jpg" alt="">':''}<header><span class="card-number">${escape(player.nationality)} · ${player.age} YEARS</span>${flag?`<img class="flag" src="resources/flags/${flag}.svg" alt="${escape(player.nationality)}">`:''}<h3>${escape(player.name)}</h3><p>${positions[player.position]}</p></header>
-  <div class="card-middle"><div class="overall"><span>OVERALL</span><b>${a.overall}</b></div><div class="attributes">${attributes.map(([label,value])=>`<div><span>${label}</span><b>${value}</b></div>`).join('')}</div></div>
-  <div class="ability ${player.action?'':'no-ability'}">${escape(player.action?.description || '')}</div>`}
+  ${back ? `<div class="back-stripe"></div><div class="back-brand">${logo()}</div>${playerOptions.deckName?`<span class="back-team">${escape(tr(playerOptions.deckTitle))}</span>`:''}${playerOptions.nationality?`<div class="back-nationality">${flag?`<img src="resources/flags/${flag}.svg" alt="">`:""}<span>${escape(player.nationality)}</span></div>`:""}` : `
+  ${playerOptions.background==='stadium'?'<img class="stadium-art" src="resources/stadium.jpg" alt="">':''}<header><span class="card-number">${escape(player.nationality)} · ${player.age} ${tr('YEARS')}</span>${flag?`<img class="flag" src="resources/flags/${flag}.svg" alt="${escape(player.nationality)}">`:''}<h3>${escape(player.name)}</h3><p>${tr(positions[player.position])}</p></header>
+  <div class="card-middle"><div class="overall"><span>${tr('OVERALL')}</span><b>${a.overall}</b></div><div class="attributes">${attributes.map(([label,value])=>`<div><span>${tr(label)}</span><b>${value}</b></div>`).join('')}</div></div>
+  <div class="ability ${player.action?'':'no-ability'}">${escape(tr(player.action?.description || ''))}</div>`}
   </article></div>`;
 }
 function page(content, label, paper, kind = 'card') {
+  label = label.split(' · ').map(part => tr(part).replace(/\b(sheet|tile)\b/g, word=>tr(word))).join(' · ');
   return `<section class="sheet ${paper} ${kind.split(' ').map(part=>`${part}-sheet`).join(' ')}" aria-label="${escape(label)}"><div class="sheet-label">${logo()}<span>${escape(label)}</span></div>${content}<div class="sheet-bottom"><span>${escape(label)}</span><span class="ruler">50 mm</span></div></section>`;
 }
 function renderDeck(view, options) {
@@ -47,21 +51,21 @@ function renderDeck(view, options) {
   return pages.flatMap((players,i) => (sides==='both'?['front','back']:[sides]).map(side => {
     const isBack = side==='back';
     const ordered = isBack ? reverseSheet(players,paper,edge) : players;
-    return page(`<div class="card-grid" style="--columns:${columns}">${ordered.map(p=>card(p,view.color,isBack,isBack && edge==='short')).join('')}</div>`,`${view.title} · sheet ${i+1} · ${side}`,paper);
+    return page(`<div class="card-grid" style="--columns:${columns}">${ordered.map(p=>card(p,view.color,isBack,isBack && edge==='short')).join('')}</div>`,`${tr(view.title)} · sheet ${i+1} · ${side}`,paper);
   })).join('');
 }
 function pitch() {
   const labels = ['Goalkeeper','Defense','Midfield','Attacking midfield','Attack'];
-  return `<div class="pitch"><div class="pitch-line"></div><div class="pitch-circle"></div><div class="pitch-brand">${logo()} <span>BLUE → &nbsp; MATCH PITCH &nbsp; ← RED</span></div>${labels.map((name,i)=>`<div class="pitch-column" style="left:${10+i*72}mm"><div class="slot red-slot"><span>${labels[4-i]}</span></div><div class="slot duel-slot"><span>DUEL ${i+1}</span></div><div class="slot blue-slot"><span>${name}</span></div></div>`).join('')}<div class="pitch-end">PRINT & PLAY · 380 × 310 mm</div></div>`;
+  return `<div class="pitch"><div class="pitch-line"></div><div class="pitch-circle"></div><div class="pitch-brand">${logo()} <span>${tr('BLUE')} → &nbsp; ${tr('MATCH PITCH')} &nbsp; ← ${tr('RED')}</span></div>${labels.map((name,i)=>`<div class="pitch-column" style="left:${10+i*72}mm"><div class="slot red-slot"><span>${tr(labels[4-i])}</span></div><div class="slot duel-slot"><span>${tr('DUEL')} ${i+1}</span></div><div class="slot blue-slot"><span>${tr(name)}</span></div></div>`).join('')}<div class="pitch-end">PRINT & PLAY · 380 × 310 mm</div></div>`;
 }
 function renderBoard(paper, duplex = false) {
-  return boardTiles(paper).flatMap((t,i)=>[page(`<div class="tile" style="width:${t.width}mm;height:${t.height}mm"><div class="tile-art" style="left:-${t.x}mm;top:-${t.y}mm">${pitch()}</div></div><p class="assembly">Tile ${i+1} · ${paper==='a4'?'2 × 2 layout: 1 2 / 3 4':'Top / bottom: 1 / 2'} · overlap matching artwork by 10 mm.</p>`,`Pitch · tile ${i+1}`,paper,'board'), ...(duplex ? [page('',`Pitch · tile ${i+1} · blank reverse`,paper,'board blank')] : [])]).join('');
+  return boardTiles(paper).flatMap((t,i)=>[page(`<div class="tile" style="width:${t.width}mm;height:${t.height}mm"><div class="tile-art" style="left:-${t.x}mm;top:-${t.y}mm">${pitch()}</div></div><p class="assembly">${tr('tile')} ${i+1} · ${tr(paper==='a4'?'2 × 2 layout: 1 2 / 3 4':'Top / bottom: 1 / 2')} · ${tr('overlap matching artwork by 10 mm.')}</p>`,`Pitch · tile ${i+1}`,paper,'board'), ...(duplex ? [page('',`Pitch · tile ${i+1} · blank reverse`,paper,'board blank')] : [])]).join('');
 }
 function renderTokens(paper,sides,edge) {
   const tokens=tokenSlots(matchTokens());
   return (sides==='both'?['front','back']:[sides]).map(side=>{
     const back=side==='back', ordered=back?tokenOrder(tokens,edge):tokens;
-    return page(`<div class="token-grid">${ordered.map(t=>t?`<div class="token-cell ${back&&edge==='short'?'rotate':''}" data-token-id="${t.id}">${tokenArt(t.type,back)}<small>${t.label}</small></div>`:'<div class="token-cell token-empty" aria-hidden="true"></div>').join('')}</div>`,`Tokens · ${side}`,paper,'tokens');
+    return page(`<div class="token-grid">${ordered.map(t=>t?`<div class="token-cell ${back&&edge==='short'?'rotate':''}" data-token-id="${t.id}">${tokenArt(t.type,back)}<small>${tr(t.label)}</small></div>`:'<div class="token-cell token-empty" aria-hidden="true"></div>').join('')}</div>`,`Tokens · ${side}`,paper,'tokens');
   }).join('');
 }
 const attributeNames={physicality:'Physical',technique:'Technique',pace:'Pace',tackle:'Tackling',mental:'Mental',finishing:'Shooting',overall:'Overall',exits:'Exits',handling:'Handling',reflexes:'Reflexes'};
@@ -77,15 +81,15 @@ function collectionCard(item,type,back,rotate) {
   if(!item) return '<div class="card-space"></div>';
   const kind=type==='duel'?(item.kind==='GOAL'?'goal':'field'):type;
   const label=type==='duel'?`${kind.toUpperCase()} DUEL`:type==='coach'?'COACH':'SPECIAL CARD';
-  const action=escape(item.action?.description||item.description||'');
+  const action=escape(tr(item.action?.description||item.description||''));
   let body;
-  if(back) body=`<div class="collection-back-frame"></div>${type==='coach'?`<div class="back-emblem">${collectionIcon('coach')}</div>`:''}<div class="back-brand">${logo()}</div><span class="back-team">${label}</span>`;
+  if(back) body=`<div class="collection-back-frame"></div>${type==='coach'?`<div class="back-emblem">${collectionIcon('coach')}</div>`:''}<div class="back-brand">${logo()}</div><span class="back-team">${tr(label)}</span>`;
   else {
-    const top=`<header class="collection-heading"><p class="category">${label}</p>${type==='special'?'':`<div class="collection-emblem">${collectionIcon(kind)}</div>`}</header>`;
+    const top=`<header class="collection-heading"><p class="category">${tr(label)}</p>${type==='special'?'':`<div class="collection-emblem">${collectionIcon(kind)}</div>`}</header>`;
     if(type==='duel') {
-      const variant=item.name.match(/\(([^)]+)\)/)?.[1];
-      body=`${top}<div class="duel-attributes" aria-label="${escape(item.name)}"><strong>${attributeNames[item.duelAttributes[0]]}</strong><span>VS</span><strong>${attributeNames[item.duelAttributes[1]]}</strong></div>${variant?`<p class="duel-variant">${escape(variant)}</p>`:''}${action?`<div class="collection-action"><span class="action-label">MATCH EFFECT</span><p>${action}</p></div>`:'<div class="duel-no-effect" aria-hidden="true"></div>'}`;
-    } else body=`${top}<h3 class="collection-title">${escape(item.name)}</h3><div class="collection-action"><span class="action-label">${type==='coach'?'COACH ABILITY':'CARD EFFECT'}</span><p>${action}</p></div><div class="collection-signature">${logo()}</div>`;
+      const variant=tr(item.name).match(/\(([^)]+)\)/)?.[1];
+      body=`${top}<div class="duel-attributes" aria-label="${escape(tr(item.name))}"><strong>${tr(attributeNames[item.duelAttributes[0]])}</strong><span>VS</span><strong>${tr(attributeNames[item.duelAttributes[1]])}</strong></div>${variant?`<p class="duel-variant">${escape(variant)}</p>`:''}${action?`<div class="collection-action"><span class="action-label">${tr('MATCH EFFECT')}</span><p>${action}</p></div>`:'<div class="duel-no-effect" aria-hidden="true"></div>'}`;
+    } else body=`${top}<h3 class="collection-title">${escape(tr(item.name))}</h3><div class="collection-action"><span class="action-label">${tr(type==='coach'?'COACH ABILITY':'CARD EFFECT')}</span><p>${action}</p></div><div class="collection-signature">${logo()}</div>`;
   }
   return `<div class="card-space"><article class="playing-card collection-card ${kind} ${back?'card-back':''} ${rotate?'rotate':''}">${body}</article></div>`;
 }
@@ -94,7 +98,7 @@ function renderCollection(view,{paper,sides,edge,duelKind}) {
   const {columns}=gridFor(paper);
   return paginate(cards,paper).flatMap((items,i)=>(sides==='both'?['front','back']:[sides]).map(side=>{
     const back=side==='back',ordered=back?reverseSheet(items,paper,edge):items;
-    return page(`<div class="card-grid" style="--columns:${columns}">${ordered.map(c=>collectionCard(c,view.type,back,back&&edge==='short')).join('')}</div>`,`${view.title} · sheet ${i+1} · ${side}`,paper);
+    return page(`<div class="card-grid" style="--columns:${columns}">${ordered.map(c=>collectionCard(c,view.type,back,back&&edge==='short')).join('')}</div>`,`${tr(view.title)} · sheet ${i+1} · ${side}`,paper);
   })).join('');
 }
 function renderAll(options) {
@@ -131,7 +135,9 @@ function render() {
     return;
   }
   document.title = `DERBY — ${view.title}`;
-  const data = new FormData(form), paper=data.get('paper'), sides=data.get('sides'), edge=data.get('edge');
+  const data = new FormData(form);
+  language = data.get('language') === 'pt' ? 'pt' : 'en';
+  const paper=data.get('paper'), sides=data.get('sides'), edge=data.get('edge');
   playerOptions={background:data.get('background'),nationality:data.has('nationality'),deckName:data.has('deckName'),deckTitle:view.title};
   const all=view===views.all;
   const duplex=view!==views.board;
@@ -143,13 +149,14 @@ function render() {
   document.querySelector('.duel-option').hidden=view!==views.duels;
   document.querySelector('#view-title').textContent=view.title;
   document.querySelector('#print-help').textContent=all
-    ? 'Complete kit: both player decks, all coaches, field and goal duels, special cards, 14 tokens and the pitch. Fronts + backs includes blank pitch reverses for duplex printing. Backs only omits the pitch. A3 uses portrait card sheets and landscape pitch tiles: save as PDF to preserve mixed orientations, then print at actual size. All card text is in English.'
+    ? 'Complete kit: both player decks, all coaches, field and goal duels, special cards, 14 tokens and the pitch. Fronts + backs includes blank pitch reverses for duplex printing. Backs only omits the pitch. A3 uses portrait card sheets and landscape pitch tiles: save as PDF to preserve mixed orientations, then print at actual size. Card text uses the selected print language.'
     : isCards
-    ? 'Portrait. For fronts + backs, print double-sided using the selected binding edge. Test the first pair of sheets before printing the full deck. All card text is in English.'
+    ? 'Portrait. For fronts + backs, print double-sided using the selected binding edge. Test the first pair of sheets before printing the full deck. Card text uses the selected print language.'
     : view===views.board ? `${paper==='a3'?'A3 landscape · 2 sheets':'A4 portrait · 4 sheets'}. Trim the blank margins, then align the repeated artwork with a 10 mm overlap. Final pitch: 380 × 310 mm. Slots fit 63 × 88 mm cards.`
     : 'Portrait. 14 tokens: 10 substitutions, 1 Derby star, 1 ball, 1 blue captain and 1 red captain. Print double-sided with the selected binding. Derby logo on the star front, star on its back; other tokens match on both sides. Test the first sheet before cutting the 25 mm circles.';
   const content = all ? renderAll(options) : view.players ? renderDeck(view,options) : view.cards ? renderCollection(view,options) : view===views.board ? renderBoard(paper) : renderTokens(paper,sides,edge);
   sheets.innerHTML=content;
+  sheets.lang=language;
   document.querySelector('#status').textContent=`${sheets.children.length} printed pages · ${paper.toUpperCase()} · ${all?'Complete kit':isCards?'63 × 88 mm cards':view===views.board?'Full-size pitch':'25 mm tokens'}`;
   const button = document.querySelector('#print-button'); button.disabled=true;
   document.querySelector('#status').textContent+=' · Preparing artwork…';

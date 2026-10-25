@@ -69,3 +69,14 @@ test('all card descriptions and non-person card names use English copy',()=>{
  assert.equal(SPECIALS[0].name,'VAR Review');
  assert.match(DECK1_PLAYERS[0].action.description,/wins the duel/);
 });
+
+import {PT,translate} from '../data/locales.js';
+test('Portuguese translations cover every ability, effect and special-card title',()=>{
+ for(const card of [...DECK1_PLAYERS,...DECK2_PLAYERS,...COACHES,...DUELS,...SPECIALS]) {
+  const text=card.action?.description||card.description;
+  if(text) {assert.ok(PT[text],text);assert.notEqual(translate(text,'pt'),text);assert.equal(translate(text,'en'),text);}
+ }
+ for(const card of SPECIALS)assert.ok(PT[card.name],card.name);
+ assert.equal(translate('VAR Review','pt'),'Recurso ao VAR');
+ assert.equal(translate('José Santos','pt'),'José Santos');
+});
