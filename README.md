@@ -13,7 +13,7 @@ Static-host-compatible hash routes also work under a GitHub Pages project path:
 | `#/print/decks/blue` | 36 default blue players |
 | `#/print/decks/red` | 36 default red players |
 | `#/print/board` | Five zones, each with red player, duel and blue player slots |
-| `#/print/tokens` | 10 substitutions, 1 Derby star, 1 ball |
+| `#/print/tokens` | 10 substitutions, 2 captains, 1 Derby star, 1 ball |
 | `#/print/coaches` | 7 coaches |
 | `#/print/duels` | 50 field + 40 goal duels, with deck filter |
 | `#/print/specials` | 30 cards, including repeated copies from the source |
@@ -44,9 +44,9 @@ on **two A3 landscape sheets** (top/bottom), or **four A4 portrait sheets**
 artwork: trim blank paper, align the repeated artwork, then tape/glue the overlap.
 A single A3 cannot fit three 88 mm card rows plus labels and safe margins.
 
-Tokens are 25 mm diameter. Exactly 12 physical tokens are supplied, with 12
-fronts and 12 registered backs. Substitution and ball faces match; the Derby
-star has the Derby logo on its front and a star on its reverse. All ten
+Tokens are 25 mm diameter. Exactly 14 physical tokens are supplied, with 14
+fronts and 14 registered backs. Substitution, captain and ball faces match; the Derby
+star has the Derby logo over a red-to-blue gradient on its front and a star on its reverse. All ten
 substitutions use the same yellow reference design.
 
 ## Player card options
@@ -54,6 +54,7 @@ substitutions use the same yellow reference design.
 - Stadium (default) or plain background for lower ink use.
 - Nationality on/off on backs for chemistry. Showing it reveals nationality
   while the card is face down, so select the option appropriate to your game.
+- Deck name on/off on player backs, independently of nationality.
 - Larger ability text; orange/blue attribute columns with labels above values.
 - No card footer, freeing space for ability text. Page identification remains
   outside the cut cards.
@@ -89,3 +90,11 @@ The Derby token uses the original logo on its front and a gold star on its back.
 - `data/`: player and collection snapshots
 - `server.mjs`: local Node.js static server
 - `tests/layout.test.js`: data counts, pagination, token faces and registration
+
+## Collection design
+
+Coaches use a navy/teal palette, a tactical clipboard icon and framed backs.
+Field duels use green, with a lighter green for goal duels. Attributes appear
+once in the central matchup, and effects use larger type beneath it.
+Special cards use plum/violet with a clear title and larger effect text,
+without a decorative star. Card dimensions and source rules are unchanged.

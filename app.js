@@ -1,6 +1,6 @@
 import { DECK1_PLAYERS, DECK2_PLAYERS } from './data/decks.js';
 import { COACHES, DUELS, SPECIAL_CARDS } from './data/collections.js';
-import { logo, tokenArt, matchTokens, tokenOrder } from './artwork.js';
+import { logo, tokenArt, matchTokens, tokenOrder, tokenSlots } from './artwork.js';
 import { gridFor, paginate, reverseSheet, boardTiles } from './layout.js';
 
 const views = {
@@ -30,7 +30,7 @@ function card(player, color, back, rotate) {
     : [['Physical',a.physicality],['Technique',a.technique],['Tackling',a.tackle],['Pace',a.pace],['Mental',a.mental],['Shooting',a.finishing]];
   const flag = flags[player.nationality];
   return `<div class="card-space" data-card-id="${escape(player.name)}"><article class="playing-card player-card ${color} ${back?'card-back':''} ${rotate?'rotate':''} ${!back&&playerOptions.background==='stadium'?'stadium':''}">
-  ${back ? `<div class="back-stripe"></div><div class="back-brand">${logo()}</div><span class="back-team">${color.toUpperCase()} TEAM</span>${playerOptions.nationality?`<div class="back-nationality">${flag?`<img src="resources/flags/${flag}.svg" alt="">`:""}<span>${escape(player.nationality)}</span></div>`:""}` : `
+  ${back ? `<div class="back-stripe"></div><div class="back-brand">${logo()}</div>${playerOptions.deckName?`<span class="back-team">${escape(playerOptions.deckTitle)}</span>`:''}${playerOptions.nationality?`<div class="back-nationality">${flag?`<img src="resources/flags/${flag}.svg" alt="">`:""}<span>${escape(player.nationality)}</span></div>`:""}` : `
   ${playerOptions.background==='stadium'?'<img class="stadium-art" src="resources/stadium.jpg" alt="">':''}<header><span class="card-number">${escape(player.nationality)} · ${player.age} YEARS</span>${flag?`<img class="flag" src="resources/flags/${flag}.svg" alt="${escape(player.nationality)}">`:''}<h3>${escape(player.name)}</h3><p>${positions[player.position]}</p></header>
   <div class="card-middle"><div class="overall"><span>OVERALL</span><b>${a.overall}</b></div><div class="attributes">${attributes.map(([label,value])=>`<div><span>${label}</span><b>${value}</b></div>`).join('')}</div></div>
   <div class="ability ${player.action?'':'no-ability'}">${escape(player.action?.description || '')}</div>`}
@@ -56,21 +56,35 @@ function renderBoard(paper) {
   return boardTiles(paper).map((t,i)=>page(`<div class="tile" style="width:${t.width}mm;height:${t.height}mm"><div class="tile-art" style="left:-${t.x}mm;top:-${t.y}mm">${pitch()}</div></div><p class="assembly">Tile ${i+1} · ${paper==='a4'?'2 × 2 layout: 1 2 / 3 4':'Top / bottom: 1 / 2'} · overlap matching artwork by 10 mm.</p>`,`Pitch · tile ${i+1}`,paper)).join('');
 }
 function renderTokens(paper,sides,edge) {
-  const tokens=matchTokens();
+  const tokens=tokenSlots(matchTokens());
   return (sides==='both'?['front','back']:[sides]).map(side=>{
     const back=side==='back', ordered=back?tokenOrder(tokens,edge):tokens;
-    return page(`<div class="token-grid">${ordered.map(t=>`<div class="token-cell ${back&&edge==='short'?'rotate':''}" data-token-id="${t.id}">${tokenArt(t.type,back)}<small>${t.label}</small></div>`).join('')}</div>`,`Tokens · ${side}`,paper);
+    return page(`<div class="token-grid">${ordered.map(t=>t?`<div class="token-cell ${back&&edge==='short'?'rotate':''}" data-token-id="${t.id}">${tokenArt(t.type,back)}<small>${t.label}</small></div>`:'<div class="token-cell token-empty" aria-hidden="true"></div>').join('')}</div>`,`Tokens · ${side}`,paper);
   }).join('');
 }
 const attributeNames={physicality:'Physical',technique:'Technique',pace:'Pace',tackle:'Tackling',mental:'Mental',finishing:'Shooting',overall:'Overall',exits:'Exits',handling:'Handling',reflexes:'Reflexes'};
+function collectionIcon(type) {
+  const shapes = {
+    coach:'<rect x="6" y="4" width="20" height="25" rx="3"/><path d="M12 4V2h8v2M11 11h10M11 16h4M18 22l5-5M19 17h4v4"/><circle cx="12" cy="23" r="2"/>',
+    field:'<rect x="3" y="6" width="26" height="20" rx="2"/><path d="M16 6v20M3 12h5v8H3M29 12h-5v8h5"/><circle cx="16" cy="16" r="4"/>',
+    goal:'<path d="M4 27V8h24v19M4 8l4-4h16l4 4M10 8v19M16 8v19M22 8v19M4 14h24M4 20h24"/>'
+  };
+  return `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${shapes[type]||''}</svg>`;
+}
 function collectionCard(item,type,back,rotate) {
   if(!item) return '<div class="card-space"></div>';
   const kind=type==='duel'?(item.kind==='GOAL'?'goal':'field'):type;
-  const label=type==='duel'?`${kind.toUpperCase()} DUEL`:type==='coach'?'COACH':'SPECIAL';
+  const label=type==='duel'?`${kind.toUpperCase()} DUEL`:type==='coach'?'COACH':'SPECIAL CARD';
+  const action=escape(item.action?.description||item.description||'');
   let body;
-  if(back) body=`<div class="back-brand">${logo()}</div><span class="back-team">${label}</span>`;
-  else if(type==='duel') body=`<header><p class="category">${label}</p><h3>${escape(item.name)}</h3></header><div class="duel-attributes"><strong>${attributeNames[item.duelAttributes[0]]}</strong><span>VS</span><strong>${attributeNames[item.duelAttributes[1]]}</strong></div><div class="collection-action">${escape(item.action?.description||'')}</div>`;
-  else body=`<header><p class="category">${label}</p><h3>${escape(item.name)}</h3></header><div class="collection-symbol">${type==='coach'?'⌁':'✦'}</div><div class="collection-action">${escape(item.action?.description||item.description||'')}</div>`;
+  if(back) body=`<div class="collection-back-frame"></div>${type==='coach'?`<div class="back-emblem">${collectionIcon('coach')}</div>`:''}<div class="back-brand">${logo()}</div><span class="back-team">${label}</span>`;
+  else {
+    const top=`<header class="collection-heading"><p class="category">${label}</p>${type==='special'?'':`<div class="collection-emblem">${collectionIcon(kind)}</div>`}</header>`;
+    if(type==='duel') {
+      const variant=item.name.match(/\(([^)]+)\)/)?.[1];
+      body=`${top}<div class="duel-attributes" aria-label="${escape(item.name)}"><strong>${attributeNames[item.duelAttributes[0]]}</strong><span>VS</span><strong>${attributeNames[item.duelAttributes[1]]}</strong></div>${variant?`<p class="duel-variant">${escape(variant)}</p>`:''}${action?`<div class="collection-action"><span class="action-label">MATCH EFFECT</span><p>${action}</p></div>`:'<div class="duel-no-effect" aria-hidden="true"></div>'}`;
+    } else body=`${top}<h3 class="collection-title">${escape(item.name)}</h3><div class="collection-action"><span class="action-label">${type==='coach'?'COACH ABILITY':'CARD EFFECT'}</span><p>${action}</p></div><div class="collection-signature">${logo()}</div>`;
+  }
   return `<div class="card-space"><article class="playing-card collection-card ${kind} ${back?'card-back':''} ${rotate?'rotate':''}">${body}</article></div>`;
 }
 function renderCollection(view,{paper,sides,edge,duelKind}) {
@@ -96,7 +110,7 @@ function render() {
   const path = location.hash.slice(1).replace(/\/$/,'') || '/print';
   currentView = Object.values(views).find(v=>v.route===path);
   const home = path==='/print';
-  document.querySelector('#navigation').innerHTML = Object.values(views).map((v,i)=>`<a class="nav-card ${currentView===v?'active':''}" href="#${v.route}" ${currentView===v?'aria-current="page"':''}><span>0${i+1}</span><strong>${v.title}</strong><small>${v.players?`${v.players.length} player cards`:v.cards?`${v.cards.length} cards`:v===views.board?'Five zones. One match.':'12 tokens · fronts + backs'}</small></a>`).join('');
+  document.querySelector('#navigation').innerHTML = Object.values(views).map((v,i)=>`<a class="nav-card ${currentView===v?'active':''}" href="#${v.route}" ${currentView===v?'aria-current="page"':''}><span>0${i+1}</span><strong>${v.title}</strong><small>${v.players?`${v.players.length} player cards`:v.cards?`${v.cards.length} cards`:v===views.board?'Five zones. One match.':'14 tokens · fronts + backs'}</small></a>`).join('');
   const view = currentView;
   document.querySelector('.workspace').hidden = !view;
   document.querySelector('#error').hidden = true;
@@ -108,7 +122,7 @@ function render() {
   }
   document.title = `DERBY — ${view.title}`;
   const data = new FormData(form), paper=data.get('paper'), sides=data.get('sides'), edge=data.get('edge');
-  playerOptions={background:data.get('background'),nationality:data.has('nationality')};
+  playerOptions={background:data.get('background'),nationality:data.has('nationality'),deckName:data.has('deckName'),deckTitle:view.title};
   const duplex=view!==views.board;
   const isCards=Boolean(view.players||view.cards);
   const options={paper,sides,edge,duelKind:data.get('duelKind')};
@@ -120,7 +134,7 @@ function render() {
   document.querySelector('#print-help').textContent=isCards
     ? 'Portrait. For fronts + backs, print double-sided using the selected binding edge. Test the first pair of sheets before printing the full deck. Ability text is preserved in Portuguese from the game data.'
     : view===views.board ? `${paper==='a3'?'A3 landscape · 2 sheets':'A4 portrait · 4 sheets'}. Trim the blank margins, then align the repeated artwork with a 10 mm overlap. Final pitch: 380 × 310 mm. Slots fit 63 × 88 mm cards.`
-    : 'Portrait. 12 tokens: 10 substitutions, 1 Derby star and 1 ball. Print double-sided with the selected binding. Derby logo on the star front, star on its back; other tokens match on both sides. Test the first sheet before cutting the 25 mm circles.';
+    : 'Portrait. 14 tokens: 10 substitutions, 1 Derby star, 1 ball, 1 blue captain and 1 red captain. Print double-sided with the selected binding. Derby logo on the star front, star on its back; other tokens match on both sides. Test the first sheet before cutting the 25 mm circles.';
   const content = view.players ? renderDeck(view,options) : view.cards ? renderCollection(view,options) : view===views.board ? renderBoard(paper) : renderTokens(paper,sides,edge);
   sheets.innerHTML=content;
   document.querySelector('#status').textContent=`${sheets.children.length} printed pages · ${paper.toUpperCase()} · ${isCards?'63 × 88 mm cards':view===views.board?'Full-size pitch':'25 mm tokens'}`;
