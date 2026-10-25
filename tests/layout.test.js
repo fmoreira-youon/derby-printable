@@ -28,7 +28,7 @@ import {COACHES,DUELS,FIELD_DUELS,GOAL_DUELS,SPECIALS,SPECIAL_CARDS} from '../da
 import {matchTokens,tokenOrder,tokenArt,tokenSlots} from '../artwork.js';
 test('collections preserve seed counts, copy quantities and action associations',()=>{
  assert.equal(COACHES.length,7);assert.equal(FIELD_DUELS.length,50);assert.equal(GOAL_DUELS.length,40);assert.equal(DUELS.length,90);assert.equal(SPECIAL_CARDS.length,30);
- assert.match(COACHES[0].action.description,/empatado/);assert.match(COACHES[6].action.description,/automaticamente/);
+ assert.match(COACHES[0].action.description,/draw/);assert.match(COACHES[6].action.description,/automatically/);
  for(const s of SPECIALS)assert.equal(SPECIAL_CARDS.filter(c=>c.name===s.name).length,s.quantity);
  for(const duel of DUELS)assert.equal(duel.duelAttributes.length,2);
 });
@@ -58,4 +58,14 @@ test('token partial row preserves physical blank positions',()=>{
  assert.equal(tokenOrder(slots,'long')[12],null);
  assert.equal(tokenOrder(slots,'long')[17].id,'captain-blue');
  assert.equal(tokenOrder(slots,'short')[0].id,'captain-blue');
+});
+
+test('all card descriptions and non-person card names use English copy',()=>{
+ const players=[...DECK1_PLAYERS,...DECK2_PLAYERS];
+ const descriptions=[...players,...COACHES,...DUELS,...SPECIALS].map(c=>c.action?.description||c.description||'');
+ for(const copy of [...descriptions,...DUELS.map(c=>c.name),...SPECIALS.map(c=>c.name)]) {
+  assert.doesNotMatch(copy,/\b(duelo|jogador|golo|treinador|próximo|ganhar|perder|habilidade|retira|carta|físico|técnica|rapidez|reflexos|saídas)\b/i);
+ }
+ assert.equal(SPECIALS[0].name,'VAR Review');
+ assert.match(DECK1_PLAYERS[0].action.description,/wins the duel/);
 });

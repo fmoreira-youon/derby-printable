@@ -10,6 +10,7 @@ Static-host-compatible hash routes also work under a GitHub Pages project path:
 | Route (after `index.html`) | Contents |
 | --- | --- |
 | `#/print` | Component chooser |
+| `#/print/all` | Complete kit in one print job / PDF |
 | `#/print/decks/blue` | 36 default blue players |
 | `#/print/decks/red` | 36 default red players |
 | `#/print/board` | Five zones, each with red player, duel and blue player slots |
@@ -67,8 +68,8 @@ Player data in `data/decks.js` comes from `derby-digital/fase2-game-engine`,
 `backend/src/seeds/cardsData.ts`. `data/collections.js` contains a snapshot of
 `duelTypesSeed.ts`, `specialsSeed.ts`, and the seven coach/action associations
 in `coachService.ts` and `actionService.ts`. Repeated duel entries and special
-quantities are preserved. The rule text remains verbatim in Portuguese; no
-rule descriptions were translated or inferred. These are source snapshots,
+quantities are preserved. All card titles and ability/effect text are translated into English; proper
+names, attributes, triggers and copy quantities are preserved. These are source snapshots,
 not queries of the live game database.
 
 The original white Derby logo was recovered from the earlier DERBY UI source.
@@ -93,8 +94,22 @@ The Derby token uses the original logo on its front and a gold star on its back.
 
 ## Collection design
 
-Coaches use a navy/teal palette, a tactical clipboard icon and framed backs.
-Field duels use green, with a lighter green for goal duels. Attributes appear
+Coaches use solid dark navy, a tactical clipboard icon and framed backs.
+Field duels use green, with a distinct solid green for goal duels. Attributes appear
 once in the central matchup, and effects use larger type beneath it.
-Special cards use plum/violet with a clear title and larger effect text,
+Special cards use gold with a clear title and larger effect text,
 without a decorative star. Card dimensions and source rules are unchanged.
+
+## Print everything
+
+`#/print/all` combines both player decks, all 7 coaches, all 90 duels,
+30 special-card copies, 14 tokens and the full-size pitch. The duel filter
+does not reduce the complete kit. Player background, nationality and deck-name
+options apply to both decks.
+
+With fronts + backs, pitch tiles have blank reverse pages so each tile uses
+a separate physical sheet. Fronts only includes the pitch; backs only omits it.
+A3 PDFs combine portrait card/token pages with landscape pitch pages; save
+as PDF first, then print at actual size with automatic page orientation.
+A4 uses portrait throughout. The complete duplex kit is 36 PDF pages in A3
+or 56 in A4, including intentional blank pitch reverses.

@@ -4,6 +4,7 @@ import { logo, tokenArt, matchTokens, tokenOrder, tokenSlots } from './artwork.j
 import { gridFor, paginate, reverseSheet, boardTiles } from './layout.js';
 
 const views = {
+  all: { title: 'Print everything', route: '/print/all' },
   blue: { title: 'Default blue deck', route: '/print/decks/blue', players: DECK2_PLAYERS, color: 'blue' },
   red: { title: 'Default red deck', route: '/print/decks/red', players: DECK1_PLAYERS, color: 'red' },
   board: { title: 'The pitch', route: '/print/board' },
@@ -36,10 +37,11 @@ function card(player, color, back, rotate) {
   <div class="ability ${player.action?'':'no-ability'}">${escape(player.action?.description || '')}</div>`}
   </article></div>`;
 }
-function page(content, label, paper) {
-  return `<section class="sheet ${paper}" aria-label="${escape(label)}"><div class="sheet-label">${logo()}<span>${escape(label)}</span></div>${content}<div class="sheet-bottom"><span>${escape(label)}</span><span class="ruler">50 mm</span></div></section>`;
+function page(content, label, paper, kind = 'card') {
+  return `<section class="sheet ${paper} ${kind.split(' ').map(part=>`${part}-sheet`).join(' ')}" aria-label="${escape(label)}"><div class="sheet-label">${logo()}<span>${escape(label)}</span></div>${content}<div class="sheet-bottom"><span>${escape(label)}</span><span class="ruler">50 mm</span></div></section>`;
 }
 function renderDeck(view, options) {
+  playerOptions.deckTitle = view.title;
   const {paper,sides,edge} = options, {columns} = gridFor(paper);
   const pages = paginate(view.players,paper);
   return pages.flatMap((players,i) => (sides==='both'?['front','back']:[sides]).map(side => {
@@ -52,14 +54,14 @@ function pitch() {
   const labels = ['Goalkeeper','Defense','Midfield','Attacking midfield','Attack'];
   return `<div class="pitch"><div class="pitch-line"></div><div class="pitch-circle"></div><div class="pitch-brand">${logo()} <span>BLUE → &nbsp; MATCH PITCH &nbsp; ← RED</span></div>${labels.map((name,i)=>`<div class="pitch-column" style="left:${10+i*72}mm"><div class="slot red-slot"><span>${labels[4-i]}</span></div><div class="slot duel-slot"><span>DUEL ${i+1}</span></div><div class="slot blue-slot"><span>${name}</span></div></div>`).join('')}<div class="pitch-end">PRINT & PLAY · 380 × 310 mm</div></div>`;
 }
-function renderBoard(paper) {
-  return boardTiles(paper).map((t,i)=>page(`<div class="tile" style="width:${t.width}mm;height:${t.height}mm"><div class="tile-art" style="left:-${t.x}mm;top:-${t.y}mm">${pitch()}</div></div><p class="assembly">Tile ${i+1} · ${paper==='a4'?'2 × 2 layout: 1 2 / 3 4':'Top / bottom: 1 / 2'} · overlap matching artwork by 10 mm.</p>`,`Pitch · tile ${i+1}`,paper)).join('');
+function renderBoard(paper, duplex = false) {
+  return boardTiles(paper).flatMap((t,i)=>[page(`<div class="tile" style="width:${t.width}mm;height:${t.height}mm"><div class="tile-art" style="left:-${t.x}mm;top:-${t.y}mm">${pitch()}</div></div><p class="assembly">Tile ${i+1} · ${paper==='a4'?'2 × 2 layout: 1 2 / 3 4':'Top / bottom: 1 / 2'} · overlap matching artwork by 10 mm.</p>`,`Pitch · tile ${i+1}`,paper,'board'), ...(duplex ? [page('',`Pitch · tile ${i+1} · blank reverse`,paper,'board blank')] : [])]).join('');
 }
 function renderTokens(paper,sides,edge) {
   const tokens=tokenSlots(matchTokens());
   return (sides==='both'?['front','back']:[sides]).map(side=>{
     const back=side==='back', ordered=back?tokenOrder(tokens,edge):tokens;
-    return page(`<div class="token-grid">${ordered.map(t=>t?`<div class="token-cell ${back&&edge==='short'?'rotate':''}" data-token-id="${t.id}">${tokenArt(t.type,back)}<small>${t.label}</small></div>`:'<div class="token-cell token-empty" aria-hidden="true"></div>').join('')}</div>`,`Tokens · ${side}`,paper);
+    return page(`<div class="token-grid">${ordered.map(t=>t?`<div class="token-cell ${back&&edge==='short'?'rotate':''}" data-token-id="${t.id}">${tokenArt(t.type,back)}<small>${t.label}</small></div>`:'<div class="token-cell token-empty" aria-hidden="true"></div>').join('')}</div>`,`Tokens · ${side}`,paper,'tokens');
   }).join('');
 }
 const attributeNames={physicality:'Physical',technique:'Technique',pace:'Pace',tackle:'Tackling',mental:'Mental',finishing:'Shooting',overall:'Overall',exits:'Exits',handling:'Handling',reflexes:'Reflexes'};
@@ -95,6 +97,14 @@ function renderCollection(view,{paper,sides,edge,duelKind}) {
     return page(`<div class="card-grid" style="--columns:${columns}">${ordered.map(c=>collectionCard(c,view.type,back,back&&edge==='short')).join('')}</div>`,`${view.title} · sheet ${i+1} · ${side}`,paper);
   })).join('');
 }
+function renderAll(options) {
+  // Each component ends on a full front/back pair. Pitch tiles need blank
+  // reverses so two different tiles never end up on the same physical sheet.
+  const components = [views.blue, views.red, views.coaches, views.duels, views.specials];
+  return components.map(view => view.players ? renderDeck(view, options) : renderCollection(view, {...options,duelKind:'all'})).join('')
+    + renderTokens(options.paper,options.sides,options.edge)
+    + (options.sides==='back' ? '' : renderBoard(options.paper,options.sides==='both'));
+}
 async function assetsReady() {
   await document.fonts.ready;
   const images=[...document.querySelectorAll('img')];
@@ -110,7 +120,7 @@ function render() {
   const path = location.hash.slice(1).replace(/\/$/,'') || '/print';
   currentView = Object.values(views).find(v=>v.route===path);
   const home = path==='/print';
-  document.querySelector('#navigation').innerHTML = Object.values(views).map((v,i)=>`<a class="nav-card ${currentView===v?'active':''}" href="#${v.route}" ${currentView===v?'aria-current="page"':''}><span>0${i+1}</span><strong>${v.title}</strong><small>${v.players?`${v.players.length} player cards`:v.cards?`${v.cards.length} cards`:v===views.board?'Five zones. One match.':'14 tokens · fronts + backs'}</small></a>`).join('');
+  document.querySelector('#navigation').innerHTML = Object.values(views).map((v,i)=>`<a class="nav-card ${currentView===v?'active':''}" href="#${v.route}" ${currentView===v?'aria-current="page"':''}><span>0${i+1}</span><strong>${v.title}</strong><small>${v.players?`${v.players.length} player cards`:v.cards?`${v.cards.length} cards`:v===views.all?'Both decks, all cards, tokens + pitch':v===views.board?'Five zones. One match.':'14 tokens · fronts + backs'}</small></a>`).join('');
   const view = currentView;
   document.querySelector('.workspace').hidden = !view;
   document.querySelector('#error').hidden = true;
@@ -123,27 +133,30 @@ function render() {
   document.title = `DERBY — ${view.title}`;
   const data = new FormData(form), paper=data.get('paper'), sides=data.get('sides'), edge=data.get('edge');
   playerOptions={background:data.get('background'),nationality:data.has('nationality'),deckName:data.has('deckName'),deckTitle:view.title};
+  const all=view===views.all;
   const duplex=view!==views.board;
   const isCards=Boolean(view.players||view.cards);
   const options={paper,sides,edge,duelKind:data.get('duelKind')};
-  document.body.className = `${paper} ${isCards?'deck-view':view===views.board?'board-view':'tokens-view'} ${data.has('marks')?'cut-marks':''}`;
+  document.body.className = `${paper} ${all?'all-view':isCards?'deck-view':view===views.board?'board-view':'tokens-view'} ${data.has('marks')?'cut-marks':''}`;
   document.querySelectorAll('.duplex-option').forEach(el=>el.hidden=!duplex);
-  document.querySelectorAll('.player-option').forEach(el=>el.hidden=!view.players);
+  document.querySelectorAll('.player-option').forEach(el=>el.hidden=!(view.players||all));
   document.querySelector('.duel-option').hidden=view!==views.duels;
   document.querySelector('#view-title').textContent=view.title;
-  document.querySelector('#print-help').textContent=isCards
-    ? 'Portrait. For fronts + backs, print double-sided using the selected binding edge. Test the first pair of sheets before printing the full deck. Ability text is preserved in Portuguese from the game data.'
+  document.querySelector('#print-help').textContent=all
+    ? 'Complete kit: both player decks, all coaches, field and goal duels, special cards, 14 tokens and the pitch. Fronts + backs includes blank pitch reverses for duplex printing. Backs only omits the pitch. A3 uses portrait card sheets and landscape pitch tiles: save as PDF to preserve mixed orientations, then print at actual size. All card text is in English.'
+    : isCards
+    ? 'Portrait. For fronts + backs, print double-sided using the selected binding edge. Test the first pair of sheets before printing the full deck. All card text is in English.'
     : view===views.board ? `${paper==='a3'?'A3 landscape · 2 sheets':'A4 portrait · 4 sheets'}. Trim the blank margins, then align the repeated artwork with a 10 mm overlap. Final pitch: 380 × 310 mm. Slots fit 63 × 88 mm cards.`
     : 'Portrait. 14 tokens: 10 substitutions, 1 Derby star, 1 ball, 1 blue captain and 1 red captain. Print double-sided with the selected binding. Derby logo on the star front, star on its back; other tokens match on both sides. Test the first sheet before cutting the 25 mm circles.';
-  const content = view.players ? renderDeck(view,options) : view.cards ? renderCollection(view,options) : view===views.board ? renderBoard(paper) : renderTokens(paper,sides,edge);
+  const content = all ? renderAll(options) : view.players ? renderDeck(view,options) : view.cards ? renderCollection(view,options) : view===views.board ? renderBoard(paper) : renderTokens(paper,sides,edge);
   sheets.innerHTML=content;
-  document.querySelector('#status').textContent=`${sheets.children.length} printed pages · ${paper.toUpperCase()} · ${isCards?'63 × 88 mm cards':view===views.board?'Full-size pitch':'25 mm tokens'}`;
+  document.querySelector('#status').textContent=`${sheets.children.length} printed pages · ${paper.toUpperCase()} · ${all?'Complete kit':isCards?'63 × 88 mm cards':view===views.board?'Full-size pitch':'25 mm tokens'}`;
   const button = document.querySelector('#print-button'); button.disabled=true;
   document.querySelector('#status').textContent+=' · Preparing artwork…';
   // Named pages keep paper size and orientation in browser-generated PDFs.
   let style=document.querySelector('#page-size');
   if (!style) {style=document.createElement('style');style.id='page-size';document.head.append(style);}
-  style.textContent=`@page {size: ${paper==='a3' ? (view===views.board?'A3 landscape':'A3 portrait') : 'A4 portrait'}; margin: 0;}`;
+  style.textContent=`@page derby-portrait {size: ${paper==='a3'?'A3':'A4'} portrait; margin:0;} @page derby-landscape {size:A3 landscape; margin:0;} @page {size: ${paper==='a3' ? (view===views.board?'A3 landscape':'A3 portrait') : 'A4 portrait'}; margin:0;}`;
   ready=assetsReady().then(()=>{
     if(id!==generation)return;
     button.disabled=false;
