@@ -1,4 +1,4 @@
-import { translate } from './data/locales.js';
+import { translate, triggerLabel } from './data/locales.js';
 import { DECK1_PLAYERS, DECK2_PLAYERS } from './data/decks.js';
 import { COACHES, DUELS, SPECIAL_CARDS } from './data/collections.js';
 import { logo, tokenArt, matchTokens, tokenOrder, tokenSlots } from './artwork.js';
@@ -16,8 +16,16 @@ const views = {
 };
 const positions = { GOALKEEPER:'Goalkeeper', DEFENSE:'Defense', MIDFIELD:'Midfield', ATTACKING_MIDFIELD:'Attacking midfield', ATTACK:'Attack' };
 const flags = { PT:'portugal', IT:'italia', FR:'franca', ES:'espanha', EN:'inglaterra', DE:'alemanha', AR:'argentina', BR:'brasil', US:'eua', MX:'mexico', BE:'belgica', NL:'holanda', CZ:'republica-checa', CL:'chile', CI:'costa-marfim', HR:'croacia', NG:'nigeria' };
+Object.assign(flags,{AU:'australia',AT:'austria',CA:'canada',CN:'china',CO:'colombia',DK:'dinamarca',EG:'egito',FI:'finlandia',GR:'grecia',IS:'islandia',JP:'japao',KR:'coreia-sul',LU:'luxemburgo',MA:'marrocos',NO:'noruega',PL:'polonia',RO:'romenia',RU:'russia',SC:'escocia',RS:'servia',SE:'suecia',CH:'suica',UA:'ucrania',UY:'uruguai',WA:'gales'});
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const form = document.querySelector('#options');
+const coachStorageKey = 'derby-print-coach-nationalities-v1';
+let savedNationalities = {};
+try { savedNationalities = JSON.parse(localStorage.getItem(coachStorageKey) || '{}') || {}; } catch {}
+const countryNames = new Intl.DisplayNames(['en'],{type:'region'});
+const countryName = code => ({EN:'England',SC:'Scotland',WA:'Wales'}[code] || countryNames.of(code));
+const countries = Object.keys(flags).sort((a,b)=>countryName(a).localeCompare(countryName(b)));
+document.querySelector('#coach-nationalities').innerHTML = COACHES.map((coach,index)=>`<label>${escape(coach.name)}<select name="coach-nationality-${index}" data-coach-name="${escape(coach.name)}"><option value="">Not assigned</option>${countries.map(code=>`<option value="${code}" ${savedNationalities[coach.name]===code?'selected':''}>${escape(countryName(code))} · ${code}</option>`).join('')}</select></label>`).join('');
 const sheets = document.querySelector('#sheets');
 const initialSide = new URLSearchParams(location.search).get('side');
 if (['front','back'].includes(initialSide)) form.elements.sides.value = initialSide;
@@ -73,7 +81,7 @@ function collectionIcon(type) {
   const shapes = {
     coach:'<rect x="6" y="4" width="20" height="25" rx="3"/><path d="M12 4V2h8v2M11 11h10M11 16h4M18 22l5-5M19 17h4v4"/><circle cx="12" cy="23" r="2"/>',
     field:'<rect x="3" y="6" width="26" height="20" rx="2"/><path d="M16 6v20M3 12h5v8H3M29 12h-5v8h5"/><circle cx="16" cy="16" r="4"/>',
-    goal:'<path d="M4 27V8h24v19M4 8l4-4h16l4 4M10 8v19M16 8v19M22 8v19M4 14h24M4 20h24"/>'
+    goal:'<path d="M3 27V10h22v17M3 10l4-5h22v17l-4 5M25 10l4-5" stroke-width="2"/><path d="M7 10v15M12 10v15M17 10v15M21 10v15M4 15h20M4 20h20M7 5v4M12 5v4M17 5v4M22 5v4M26 8h2M26 13h2M26 18h2" stroke-width=".8" opacity=".6"/><path d="M1 28h29"/>'
   };
   return `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${shapes[type]||''}</svg>`;
 }
@@ -85,11 +93,13 @@ function collectionCard(item,type,back,rotate) {
   let body;
   if(back) body=`<div class="collection-back-frame"></div>${type==='coach'?`<div class="back-emblem">${collectionIcon('coach')}</div>`:''}<div class="back-brand">${logo()}</div><span class="back-team">${tr(label)}</span>`;
   else {
-    const top=`<header class="collection-heading"><p class="category">${tr(label)}</p>${type==='special'?'':`<div class="collection-emblem">${collectionIcon(kind)}</div>`}</header>`;
+    const coachIndex=type==='coach'?COACHES.indexOf(item):-1;
+    const nationality=coachIndex>=0 ? form.elements.namedItem(`coach-nationality-${coachIndex}`).value || item.nationality : '';
+    const coachNationality=nationality&&flags[nationality]?`<div class="coach-nationality"><span>${escape(nationality)}</span><img class="flag" src="resources/flags/${flags[nationality]}.svg" alt="${escape(countryName(nationality))}"></div>`:'';
+    const top=`<header class="collection-heading"><p class="category">${tr(label)}</p>${type==='special'?'':coachNationality||`<div class="collection-emblem">${collectionIcon(kind)}</div>`}</header>`;
     if(type==='duel') {
-      const variant=tr(item.name).match(/\(([^)]+)\)/)?.[1];
-      body=`${top}<div class="duel-attributes" aria-label="${escape(tr(item.name))}"><strong>${tr(attributeNames[item.duelAttributes[0]])}</strong><span>VS</span><strong>${tr(attributeNames[item.duelAttributes[1]])}</strong></div>${variant?`<p class="duel-variant">${escape(variant)}</p>`:''}${action?`<div class="collection-action"><span class="action-label">${tr('MATCH EFFECT')}</span><p>${action}</p></div>`:'<div class="duel-no-effect" aria-hidden="true"></div>'}`;
-    } else body=`${top}<h3 class="collection-title">${escape(tr(item.name))}</h3><div class="collection-action"><span class="action-label">${tr(type==='coach'?'COACH ABILITY':'CARD EFFECT')}</span><p>${action}</p></div><div class="collection-signature">${logo()}</div>`;
+      body=`${top}<div class="duel-attributes" aria-label="${escape(tr(item.name))}"><strong>${tr(attributeNames[item.duelAttributes[0]])}</strong><span>VS</span><strong>${tr(attributeNames[item.duelAttributes[1]])}</strong></div>${action?`<div class="collection-action"><span class="action-label">${escape(triggerLabel(item.action?.trigger,language))}</span><p>${action}</p></div>`:'<div class="duel-no-effect" aria-hidden="true"></div>'}`;
+    } else body=`${top}<h3 class="collection-title">${escape(tr(item.name))}</h3><div class="collection-action"><span class="action-label">${type==='coach'?tr('COACH ABILITY'):escape(triggerLabel(item.trigger||item.action?.trigger,language))}</span><p>${action}</p></div><div class="collection-signature">${logo()}</div>`;
   }
   return `<div class="card-space"><article class="playing-card collection-card ${kind} ${back?'card-back':''} ${rotate?'rotate':''}">${body}</article></div>`;
 }
@@ -142,6 +152,7 @@ function render() {
   const all=view===views.all;
   const duplex=view!==views.board;
   const isCards=Boolean(view.players||view.cards);
+  document.querySelector('#coach-settings').hidden=!(all||view===views.coaches);
   const options={paper,sides,edge,duelKind:data.get('duelKind')};
   document.body.className = `${paper} ${all?'all-view':isCards?'deck-view':view===views.board?'board-view':'tokens-view'} ${data.has('marks')?'cut-marks':''}`;
   document.querySelectorAll('.duplex-option').forEach(el=>el.hidden=!duplex);
@@ -173,7 +184,11 @@ function render() {
     const error=document.querySelector('#error');error.hidden=false;error.textContent='An image could not load. Reload the page before printing.';
   });
 }
-form.addEventListener('change',render);
+form.addEventListener('change',()=>{
+  const nationalities=Object.fromEntries(COACHES.map((coach,index)=>[coach.name,form.elements.namedItem(`coach-nationality-${index}`).value]));
+  try {localStorage.setItem(coachStorageKey,JSON.stringify(nationalities));} catch {}
+  render();
+});
 window.addEventListener('hashchange',render);
 document.querySelector('#print-button').addEventListener('click',async()=>{await ready;if(!document.querySelector('#print-button').disabled)window.print();});
 render();

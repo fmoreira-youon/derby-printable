@@ -231,3 +231,21 @@ export const PT = {
   "overlap matching artwork by 10 mm.": "sobrepor o desenho em 10 mm."
 };
 export function translate(text, language = "en") { return language === "pt" ? (PT[text] ?? text) : text; }
+
+export const TRIGGER_LABELS = {
+ immediate: 'Immediate', passive: 'Passive', before_duel: 'Before duel',
+ duel_start: 'On duel start', after_duel: 'On duel end', duel_resolved: 'On duel end',
+ duel_win: 'On duel win', duel_loss: 'On duel loss', duel_draw: 'On draw', on_draw: 'On draw',
+ game_start: 'On game start', game_end: 'On game end', on_goal: 'On goal scored',
+ on_goal_conceded: 'On goal conceded'
+};
+Object.assign(PT, {
+ 'Immediate':'Imediato', 'Passive':'Passivo', 'Before duel':'Antes do duelo',
+ 'On duel start':'No início do duelo', 'On duel end':'No fim do duelo',
+ 'On duel win':'Ao ganhar o duelo', 'On duel loss':'Ao perder o duelo', 'On draw':'Em caso de empate',
+ 'On game start':'No início do jogo', 'On game end':'No fim do jogo',
+ 'On goal scored':'Ao marcar golo', 'On goal conceded':'Ao sofrer golo'
+});
+export function triggerLabel(trigger, language = 'en') {
+ return translate(TRIGGER_LABELS[trigger] ?? String(trigger ?? '').replaceAll('_',' '), language);
+}

@@ -80,3 +80,17 @@ test('Portuguese translations cover every ability, effect and special-card title
  assert.equal(translate('VAR Review','pt'),'Recurso ao VAR');
  assert.equal(translate('José Santos','pt'),'José Santos');
 });
+
+import {triggerLabel,TRIGGER_LABELS} from '../data/locales.js';
+test('every printed duel and special effect has a translated timing label',()=>{
+ for(const card of [...DUELS,...SPECIALS]) {
+  if(!card.action&&!card.description)continue;
+  const trigger=card.action?.trigger||card.trigger;
+  assert.ok(TRIGGER_LABELS[trigger],trigger);
+  assert.ok(triggerLabel(trigger,'en'));
+  assert.notEqual(triggerLabel(trigger,'pt'),triggerLabel(trigger,'en'));
+ }
+ assert.equal(triggerLabel('duel_resolved','en'),'On duel end');
+ assert.equal(triggerLabel('duel_draw','pt'),'Em caso de empate');
+ assert.equal(triggerLabel('immediate','en'),'Immediate');
+});

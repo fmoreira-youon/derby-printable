@@ -3,7 +3,7 @@ export const logo = (className = '') => `<img class="derby-logo ${className}" sr
 // Scalable artwork following the supplied token reference: white double ring,
 // yellow substitution disc with circular arrows, and a black/white football.
 export function tokenArt(type, back = false) {
-  if (type === 'derby' && !back) return `<div class="token derby-token">${logo()}</div>`;
+  if (type === 'derby' && !back) return `<div class="token derby-token"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="49" fill="#101a32"/><circle cx="50" cy="50" r="44" fill="none" stroke="#ffb800" stroke-width="2.3"/></svg>${logo()}</div>`;
   if (type.startsWith('captain-')) {
     const color = type === 'captain-blue' ? '#3045ef' : '#f3222b';
     return `<div class="token captain-token"><svg viewBox="0 0 100 100" role="img" aria-label="${type==='captain-blue'?'Blue':'Red'} captain"><circle cx="50" cy="50" r="49" fill="${color}" stroke="white" stroke-width="1.5"/><circle cx="50" cy="50" r="44" fill="none" stroke="white" stroke-width="2"/><text x="50" y="74" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="68" font-weight="700" fill="none" stroke="white" stroke-width="1.8">C</text></svg></div>`;

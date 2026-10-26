@@ -47,7 +47,7 @@ A single A3 cannot fit three 88 mm card rows plus labels and safe margins.
 
 Tokens are 25 mm diameter. Exactly 14 physical tokens are supplied, with 14
 fronts and 14 registered backs. Substitution, captain and ball faces match; the Derby
-star has the Derby logo over a red-to-blue gradient on its front and a star on its reverse. All ten
+star has the Derby logo on its front and a star on its reverse, both with a navy background and gold ring. All ten
 substitutions use the same yellow reference design.
 
 ## Player card options
@@ -97,7 +97,7 @@ The Derby token uses the original logo on its front and a gold star on its back.
 Coaches use solid dark navy, a tactical clipboard icon and framed backs.
 Field duels use green, with a distinct solid green for goal duels. Attributes appear
 once in the central matchup, and effects use larger type beneath it.
-Special cards use a luminous gold gradient with dark text, a clear title and larger effect text,
+Special cards use a dark blue-to-red game gradient with white text, a clear title and larger effect text,
 without a decorative star. Card dimensions and source rules are unchanged.
 
 ## Print everything
@@ -122,3 +122,16 @@ cards, backs, token captions and pitch positions. Navigation and print controls
 remain in English. Portuguese copy is kept in `data/locales.js`, recovered from
 the original game snapshots, alongside the shared English data. Statistics,
 triggers and quantities use one data source. Proper names remain unchanged.
+
+## Coach nationalities and timing labels
+
+The original coach seed does not assign nationalities. On Coaches or Print
+everything, expand **Coach nationalities** and select each country. Selections
+are remembered in this browser and add the nationality code and circular flag
+to the front of each coach card. Unassigned coaches print without a flag.
+
+Duel and special effects show their actual action trigger as a readable timing
+label in PT/EN. Duel variant subtitles are omitted: `(1)` and `(2)` are source
+copy identifiers, not rules. `GK advances` marks the card whose effect advances
+a winning goalkeeper directly to midfield; its full rule remains printed.
+The redesigned goal icon uses a goal frame, perspective and a fine net.
