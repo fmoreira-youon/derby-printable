@@ -39,7 +39,7 @@ Dotted guides sit 1 mm outside the card edge. Cut the actual card boundary,
 using the guides to locate it. This is a home-print layout without professional
 bleed. A4 card sheets require no more than 7.5 mm side margins.
 
-The pitch defaults to 380 × 460 mm with coach/substitution areas; disable them
+The pitch defaults to 380 × 480 mm with coach/substitution areas; disable them
 for the compact 380 × 310 mm version. Both have fifteen full-size player/duel slots. Print
 on **two A3 landscape sheets** (top/bottom), or **four A4 portrait sheets**
 (top left, top right, bottom left, bottom right). Each join repeats 10 mm of
@@ -149,9 +149,9 @@ Goal Duel uses the supplied `baliza.svg`, stored unchanged as `resources/goal.sv
 routes. Each side has one 63 × 88 mm coach slot (upright, like player cards) and
 five 25 mm substitution-token slots. The red area is rotated for its player.
 
-The expanded pitch is 380 × 460 mm. It still uses **2 A3 landscape or 4 A4
+The expanded pitch is 380 × 480 mm. It still uses **2 A3 landscape or 4 A4
 portrait sheets**, with 10 mm joins and full-size card/token spaces. Tiles are
-235 mm high. Turn the checkbox off for the original 380 × 310 mm compact pitch.
+245 mm high. Turn the checkbox off for the original 380 × 310 mm compact pitch.
 The expanded area changes the assembled board size, not its sheet count.
 
 ## Optional deck and shared-pile spaces
@@ -162,7 +162,7 @@ The two shared duel piles sit together in the red-side reserve area; the shared
 special-card pile sits in the blue-side reserve area. Dotted gold borders
 distinguish these shared piles from the team coach spaces.
 
-Either reserve-area option uses a 380 × 460 mm board, still 2 A3 landscape or
+Either reserve-area option uses a 380 × 480 mm board, still 2 A3 landscape or
 4 A4 portrait pages. With both options off, the board is 380 × 310 mm. Player
 card rows are closer together in the expanded board, retaining 63 × 88 mm slots.
 The substitution tokens use two rows and coaches stay upright for each player.
@@ -172,3 +172,5 @@ A 7%-opacity Derby watermark sits at midfield. Field artwork now includes the
 halfway line, centre circle and spot, penalty areas, goal areas, penalty spots
 and arcs, goals and corner arcs. These marks are decorative; gameplay spaces
 and all physical card/token sizes are unchanged.
+
+Reserve areas have 6 mm of space above and below the upright cards, with no separator border. Assembly notes use smaller margins to preserve the existing page counts.

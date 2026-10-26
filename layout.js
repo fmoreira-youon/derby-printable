@@ -16,7 +16,7 @@ export function reverseSheet(sheet, paper, edge) {
 }
 export function boardGeometry(benches = false, piles = false) {
   const expanded = benches || piles;
-  return {width:380,height:expanded?460:310,fieldTop:expanded?90:0,fieldHeight:expanded?280:310,tileHeight:expanded?235:160,stepY:expanded?225:150};
+  return {width:380,height:expanded?480:310,fieldTop:expanded?100:0,fieldHeight:expanded?280:310,tileHeight:expanded?245:160,stepY:expanded?235:150};
 }
 export function boardTiles(paper, benches = false, piles = false) {
   const {tileHeight,stepY}=boardGeometry(benches,piles);

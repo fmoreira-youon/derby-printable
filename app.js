@@ -87,7 +87,7 @@ function pitch(benches = false, piles = false) {
   const labels = ['Goalkeeper','Defense','Midfield','Attacking midfield','Attack'];
   const {height,fieldTop,fieldHeight}=boardGeometry(benches,piles);
   const expanded=benches||piles;
-  return `<div class="pitch ${expanded?'expanded-pitch':''}" style="height:${height}mm"><div class="pitch-field" style="top:${fieldTop}mm;height:${fieldHeight}mm">${pitchMarkings(fieldHeight)}<div class="pitch-watermark">${logo()}</div>${labels.map((name,i)=>`<div class="pitch-column" style="left:${10+i*72}mm"><div class="slot red-slot"><span>${tr(labels[4-i])}</span></div><div class="slot duel-slot"><span>${tr('DUEL')} ${i+1}</span></div><div class="slot blue-slot"><span>${tr(name)}</span></div></div>`).join('')}</div>${expanded?bench('red',0,benches,piles)+bench('blue',height-90,benches,piles):''}</div>`;
+  return `<div class="pitch ${expanded?'expanded-pitch':''}" style="height:${height}mm"><div class="pitch-field" style="top:${fieldTop}mm;height:${fieldHeight}mm">${pitchMarkings(fieldHeight)}<div class="pitch-watermark">${logo()}</div>${labels.map((name,i)=>`<div class="pitch-column" style="left:${10+i*72}mm"><div class="slot red-slot"><span>${tr(labels[4-i])}</span></div><div class="slot duel-slot"><span>${tr('DUEL')} ${i+1}</span></div><div class="slot blue-slot"><span>${tr(name)}</span></div></div>`).join('')}</div>${expanded?bench('red',0,benches,piles)+bench('blue',height-fieldTop,benches,piles):''}</div>`;
 }
 function renderBoard(paper, duplex = false) {
   const benches=form.elements.benches.checked, piles=form.elements.piles.checked;
