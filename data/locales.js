@@ -262,3 +262,8 @@ Object.assign(PT, {
   "Once per game, ignore one player’s out-of-position penalty for one duel.": "Uma vez por jogo, ignora a penalização por posição de um jogador durante um duelo.",
   "SUBSTITUTIONS": "SUBSTITUIÇÕES"
 });
+
+Object.assign(PT, {
+ 'PLAYER DECK':'DECK DE JOGADORES', 'FIELD DUELS':'DUELOS DE CAMPO',
+ 'GOAL DUELS':'DUELOS DE BALIZA', 'SPECIAL CARDS':'CARTAS ESPECIAIS'
+});

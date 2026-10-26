@@ -104,10 +104,12 @@ test('coach sheet is full in A3 and supplied base nationalities are exact',()=>{
  const sheets=paginate(COACHES,'a3');assert.equal(sheets.length,1);assert.ok(sheets[0].every(Boolean));
  for(const coach of EXTRA_COACHES){assert.equal(coach.edition,'printable-expansion');assert.ok(PT[coach.action.description]);}
 });
-for(const paper of ['a3','a4'])test(`${paper}: benches retain sheet count, physical scale and 10 mm joins`,()=>{
- const compact=boardTiles(paper),expanded=boardTiles(paper,true),geometry=boardGeometry(true);
- assert.equal(expanded.length,compact.length);assert.equal(geometry.height,450);
- assert.equal(expanded[0].height-expanded[expanded.length-1].y,10);
- for(let y=0;y<450;y++)for(let x=0;x<380;x++)assert.ok(expanded.some(t=>x>=t.x&&x<t.x+t.width&&y>=t.y&&y<t.y+t.height));
- for(const tile of expanded){assert.ok(tile.height<=230);assert.ok(tile.width<=(paper==='a4'?195:380));}
+for(const paper of ['a3','a4'])for(const [benches,piles] of [[false,false],[true,false],[false,true],[true,true]])test(`${paper}: board options ${benches}/${piles} keep full-size coverage and sheet count`,()=>{
+ const compact=boardTiles(paper),tiles=boardTiles(paper,benches,piles),geometry=boardGeometry(benches,piles);
+ const expanded=benches||piles;
+ assert.equal(tiles.length,compact.length);assert.equal(geometry.height,expanded?460:310);
+ assert.equal(geometry.fieldHeight+2*geometry.fieldTop,geometry.height);
+ assert.equal(tiles[0].height-tiles[tiles.length-1].y,10);
+ for(let y=0;y<geometry.height;y++)for(let x=0;x<380;x++)assert.ok(tiles.some(t=>x>=t.x&&x<t.x+t.width&&y>=t.y&&y<t.y+t.height));
+ for(const tile of tiles){assert.ok(tile.height<=235);assert.ok(tile.width<=(paper==='a4'?195:380));}
 });

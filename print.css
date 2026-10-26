@@ -55,11 +55,22 @@
 #coach-settings{flex:1 0 100%;border-top:1px solid #ffffff20;padding-top:15px}#coach-settings summary{cursor:pointer;font-size:13px;color:#e8edf8}#coach-settings p{font-size:12px;line-height:1.5;color:#b5bfd5}#coach-nationalities{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}
 
 .collection-emblem .goal-icon{display:block;width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1)}
-.pitch-field{position:absolute;left:0;width:380mm;height:310mm}
-.coach-bench{position:absolute;left:0;width:378mm;height:70mm;display:flex;align-items:center;gap:24mm;padding:3mm 10mm;background:#102e2c;border-top:.35mm solid #b3cdff}
+/* Field artwork stays behind full-size card spaces. */
+.pitch-field{position:absolute;left:0;width:380mm;height:310mm;isolation:isolate}
+.pitch-markings{position:absolute;inset:0;width:100%;height:100%;color:white;opacity:.38;z-index:0;pointer-events:none}
+.pitch-watermark{position:absolute;left:50%;top:50%;width:110mm;transform:translate(-50%,-50%);opacity:.07;z-index:0;pointer-events:none}
+.pitch-column{z-index:1}
+.expanded-pitch .pitch-column{top:4mm}.expanded-pitch .slot{margin-bottom:4mm}
+.coach-bench{position:absolute;left:0;width:378mm;height:90mm;display:flex;align-items:center;gap:8mm;padding:0 10mm;background:#102e2c;border-top:.35mm solid #b3cdff}
 .coach-bench.red-bench{transform:rotate(180deg);border-color:#edb3bc}
-.bench-coach-slot{width:88mm;height:63mm;border:.5mm solid #b3cdff;border-radius:3mm;background:#071d2299;flex-shrink:0;position:relative}
+.bench-card-group{display:flex;gap:5mm;flex-shrink:0}
+.bench-coach-slot,.bench-pile-slot{width:63mm;height:88mm;border:.5mm solid #b3cdff;border-radius:3mm;background:#071d2299;flex-shrink:0;position:relative}
 .red-bench .bench-coach-slot{border-color:#edb3bc}
-.bench-coach-slot>span{position:absolute;top:3mm;left:0;right:0;text-align:center;font-size:8pt;letter-spacing:1px}
-.bench-reserves{display:flex;flex-direction:column;gap:5mm}.bench-reserves>p{font-size:8pt;letter-spacing:1px;margin:0;text-align:center}
-.bench-token-row{display:flex;gap:12mm}.bench-token-slot{width:25mm;height:25mm;border:.4mm dashed #d4bd6f;border-radius:50%;display:grid;place-items:center;background:#071d224d}.bench-token-slot>span{font-size:8pt;color:#d4bd6f}
+.bench-pile-slot{border:.4mm dashed #d4bd6f;background:#d4bd6f09}
+.bench-coach-slot>span,.bench-pile-slot>span{position:absolute;top:3mm;left:2mm;right:2mm;text-align:center;font-size:7pt;line-height:1.2;letter-spacing:.5px}
+.bench-reserves{display:flex;flex-direction:column;gap:4mm;width:83mm;flex-shrink:0;margin-left:auto}.bench-reserves>p{font-size:7.5pt;letter-spacing:.6px;margin:0;text-align:center}
+.bench-token-row{display:grid;grid-template-columns:repeat(3,25mm);gap:4mm}.bench-token-slot{width:25mm;height:25mm;border:.4mm dashed #d4bd6f;border-radius:50%;display:grid;place-items:center;background:#071d224d}.bench-token-slot>span{font-size:8pt;color:#d4bd6f}
+.board-sheet.a3{padding-top:20mm;padding-bottom:20mm}.board-sheet.a4{padding-top:20mm;padding-bottom:20mm}
+/* Keep the outer frame inside the artwork without clipping edge card slots. */
+.pitch{border:0;box-shadow:inset 0 0 0 .5mm #f0e9cd}
+.coach-bench{width:380mm}

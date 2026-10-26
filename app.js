@@ -62,17 +62,36 @@ function renderDeck(view, options) {
     return page(`<div class="card-grid" style="--columns:${columns}">${ordered.map(p=>card(p,view.color,isBack,isBack && edge==='short')).join('')}</div>`,`${tr(view.title)} · sheet ${i+1} · ${side}`,paper);
   })).join('');
 }
-function bench(side, top) {
-  return `<div class="coach-bench ${side}-bench" style="top:${top}mm"><div class="bench-coach-slot"><span>${tr('COACH')}</span></div><div class="bench-reserves"><p>${tr('SUBSTITUTIONS')}</p><div class="bench-token-row">${Array.from({length:5},(_,i)=>`<div class="bench-token-slot"><span>${i+1}</span></div>`).join('')}</div></div></div>`;
+function pileSlot(label) {
+  return `<div class="bench-pile-slot" data-pile="${label}"><span>${tr(label)}</span></div>`;
 }
-function pitch(benches = false) {
+function bench(side, top, benches, piles) {
+  const coach=benches?`<div class="bench-coach-slot"><span>${tr('COACH')}</span></div>`:'';
+  const decks=piles?pileSlot('PLAYER DECK')+(side==='red'?pileSlot('FIELD DUELS')+pileSlot('GOAL DUELS'):pileSlot('SPECIAL CARDS')):'';
+  const tokens=benches?`<div class="bench-reserves"><p>${tr('SUBSTITUTIONS')}</p><div class="bench-token-row">${Array.from({length:5},(_,i)=>`<div class="bench-token-slot"><span>${i+1}</span></div>`).join('')}</div></div>`:'';
+  return `<div class="coach-bench ${side}-bench" style="top:${top}mm"><div class="bench-card-group">${coach}${decks}</div>${tokens}</div>`;
+}
+function pitchMarkings(height) {
+  const cy=height/2;
+  return `<svg class="pitch-markings" viewBox="0 0 380 ${height}" aria-hidden="true" fill="none" stroke="currentColor" stroke-width=".45">
+    <rect x="8" y="8" width="364" height="${height-16}"/><path class="halfway-line" d="M190 8V${height-8}"/>
+    <circle cx="190" cy="${cy}" r="31"/><g fill="currentColor" stroke="none"><circle cx="190" cy="${cy}" r=".9"/><circle cx="39" cy="${cy}" r=".8"/><circle cx="341" cy="${cy}" r=".8"/></g>
+    <path class="penalty-areas" d="M8 ${cy-48}h44v96H8M372 ${cy-48}h-44v96h44"/>
+    <path class="goal-areas" d="M8 ${cy-25}h17v50H8M372 ${cy-25}h-17v50h17"/>
+    <path class="penalty-arcs" d="M52 ${cy-28}a31 31 0 0 1 0 56M328 ${cy-28}a31 31 0 0 0 0 56"/>
+    <path class="goals" d="M8 ${cy-12}H3v24h5M372 ${cy-12}h5v24h-5"/>
+    <path class="corner-arcs" d="M8 13a5 5 0 0 0 5-5M367 8a5 5 0 0 0 5 5M8 ${height-13}a5 5 0 0 1 5 5M367 ${height-8}a5 5 0 0 1 5-5"/>
+  </svg>`;
+}
+function pitch(benches = false, piles = false) {
   const labels = ['Goalkeeper','Defense','Midfield','Attacking midfield','Attack'];
-  const {height,fieldTop}=boardGeometry(benches);
-  return `<div class="pitch" style="height:${height}mm"><div class="pitch-field" style="top:${fieldTop}mm"><div class="pitch-line"></div><div class="pitch-circle"></div><div class="pitch-brand">${logo()} <span>${tr('BLUE')} → &nbsp; ${tr('MATCH PITCH')} &nbsp; ← ${tr('RED')}</span></div>${labels.map((name,i)=>`<div class="pitch-column" style="left:${10+i*72}mm"><div class="slot red-slot"><span>${tr(labels[4-i])}</span></div><div class="slot duel-slot"><span>${tr('DUEL')} ${i+1}</span></div><div class="slot blue-slot"><span>${tr(name)}</span></div></div>`).join('')}<div class="pitch-end">PRINT & PLAY · 380 × ${height} mm</div></div>${benches?bench('red',0)+bench('blue',380):''}</div>`;
+  const {height,fieldTop,fieldHeight}=boardGeometry(benches,piles);
+  const expanded=benches||piles;
+  return `<div class="pitch ${expanded?'expanded-pitch':''}" style="height:${height}mm"><div class="pitch-field" style="top:${fieldTop}mm;height:${fieldHeight}mm">${pitchMarkings(fieldHeight)}<div class="pitch-watermark">${logo()}</div>${labels.map((name,i)=>`<div class="pitch-column" style="left:${10+i*72}mm"><div class="slot red-slot"><span>${tr(labels[4-i])}</span></div><div class="slot duel-slot"><span>${tr('DUEL')} ${i+1}</span></div><div class="slot blue-slot"><span>${tr(name)}</span></div></div>`).join('')}</div>${expanded?bench('red',0,benches,piles)+bench('blue',height-90,benches,piles):''}</div>`;
 }
 function renderBoard(paper, duplex = false) {
-  const benches=form.elements.benches.checked;
-  return boardTiles(paper,benches).flatMap((t,i)=>[page(`<div class="tile" style="width:${t.width}mm;height:${t.height}mm"><div class="tile-art" style="left:-${t.x}mm;top:-${t.y}mm">${pitch(benches)}</div></div><p class="assembly">${tr('tile')} ${i+1} · ${tr(paper==='a4'?'2 × 2 layout: 1 2 / 3 4':'Top / bottom: 1 / 2')} · ${tr('overlap matching artwork by 10 mm.')}</p>`,`Pitch · tile ${i+1}`,paper,'board'), ...(duplex ? [page('',`Pitch · tile ${i+1} · blank reverse`,paper,'board blank')] : [])]).join('');
+  const benches=form.elements.benches.checked, piles=form.elements.piles.checked;
+  return boardTiles(paper,benches,piles).flatMap((t,i)=>[page(`<div class="tile" style="width:${t.width}mm;height:${t.height}mm"><div class="tile-art" style="left:-${t.x}mm;top:-${t.y}mm">${pitch(benches,piles)}</div></div><p class="assembly">${tr('tile')} ${i+1} · ${tr(paper==='a4'?'2 × 2 layout: 1 2 / 3 4':'Top / bottom: 1 / 2')} · ${tr('overlap matching artwork by 10 mm.')}</p>`,`Pitch · tile ${i+1}`,paper,'board'), ...(duplex ? [page('',`Pitch · tile ${i+1} · blank reverse`,paper,'board blank')] : [])]).join('');
 }
 function renderTokens(paper,sides,edge) {
   const tokens=tokenSlots(matchTokens());
@@ -164,13 +183,13 @@ function render() {
   document.querySelectorAll('.duplex-option').forEach(el=>el.hidden=!duplex);
   document.querySelectorAll('.player-option').forEach(el=>el.hidden=!(view.players||all));
   document.querySelector('.duel-option').hidden=view!==views.duels;
-  document.querySelector('.board-option').hidden=!(all||view===views.board);
+  document.querySelectorAll('.board-option').forEach(el=>el.hidden=!(all||view===views.board));
   document.querySelector('#view-title').textContent=view.title;
   document.querySelector('#print-help').textContent=all
     ? 'Complete kit: both player decks, all coaches, field and goal duels, special cards, 14 tokens and the pitch. Fronts + backs includes blank pitch reverses for duplex printing. Backs only omits the pitch. A3 uses portrait card sheets and landscape pitch tiles: save as PDF to preserve mixed orientations, then print at actual size. Card text uses the selected print language.'
     : isCards
     ? 'Portrait. For fronts + backs, print double-sided using the selected binding edge. Test the first pair of sheets before printing the full deck. Card text uses the selected print language.'
-    : view===views.board ? `${paper==='a3'?'A3 landscape · 2 sheets':'A4 portrait · 4 sheets'}. Trim the blank margins, then align the repeated artwork with a 10 mm overlap. Final pitch: 380 × ${boardGeometry(form.elements.benches.checked).height} mm. ${form.elements.benches.checked?'Coach cards sit sideways (88 × 63 mm); five 25 mm substitution slots per side. ':''}Player slots fit 63 × 88 mm cards.`
+    : view===views.board ? `${paper==='a3'?'A3 landscape · 2 sheets':'A4 portrait · 4 sheets'}. Trim the blank margins, then align the repeated artwork with a 10 mm overlap. Final pitch: 380 × ${boardGeometry(form.elements.benches.checked,form.elements.piles.checked).height} mm. ${form.elements.benches.checked?'Coaches sit upright (63 × 88 mm); five 25 mm substitution slots per side. ':''}${form.elements.piles.checked?'Includes two player decks and shared field-duel, goal-duel and special-card piles. ':''}All card slots are 63 × 88 mm.`
     : 'Portrait. 14 tokens: 10 substitutions, 1 Derby star, 1 ball, 1 blue captain and 1 red captain. Print double-sided with the selected binding. Derby logo on the star front, star on its back; other tokens match on both sides. Test the first sheet before cutting the 25 mm circles.';
   const content = all ? renderAll(options) : view.players ? renderDeck(view,options) : view.cards ? renderCollection(view,options) : view===views.board ? renderBoard(paper) : renderTokens(paper,sides,edge);
   sheets.innerHTML=content;
