@@ -344,7 +344,25 @@ const COACH_ACTIONS = [
     ]
 
 
-const COACHES = ["José Santos","Mário João","Rafael Passos","Emílio Pateiro","Osvaldo Oliva","Nick Role","Martin Callado"].map((name,index)=>({name,action:COACH_ACTIONS[index]}));
+// Original coach nationalities supplied by the user; base abilities unchanged.
+const BASE_COACHES = [
+ ['José Santos','PT'], ['Mário João','BR'], ['Rafael Passos','PT'],
+ ['Emílio Pateiro','ES'], ['Osvaldo Oliva','MX'], ['Nick Role','EN'], ['Martin Callado','AR']
+].map(([name,nationality],index)=>({name,nationality,action:COACH_ACTIONS[index]}));
+
+// Nine optional design proposals for the printable edition, not digital-game seeds.
+const EXTRA_COACHES = [
+ {name:'Luc Morel',nationality:'FR',action:{trigger:'before_duel',description:'Once per game, give your player +2 Pace for one duel.'}},
+ {name:'Lukas Weber',nationality:'DE',action:{trigger:'before_duel',description:'Once per game, give your player +2 Mental for one duel.'}},
+ {name:'Paolo Rinaldi',nationality:'IT',action:{trigger:'game_start',description:'Start the game with one additional player card in your hand.'}},
+ {name:'Daan Vermeer',nationality:'NL',action:{trigger:'duel_loss',description:'Once per game, after losing a field duel, take the Derby Star token.'}},
+ {name:'Ivan Kovac',nationality:'HR',action:{trigger:'duel_start',description:'Your captain gains +1 Overall while you hold the Derby Star token.'}},
+ {name:'Kenji Sato',nationality:'JP',action:{trigger:'on_goal_conceded',description:'After conceding a goal, draw one player card.'}},
+ {name:'Erik Lind',nationality:'SE',action:{trigger:'before_duel',description:'Once per game, swap two of your players on the pitch before a duel.'}},
+ {name:'Noah Brooks',nationality:'US',action:{trigger:'duel_win',description:'Once per game, after winning a field duel, draw a special card.'}},
+ {name:'Mateo Rojas',nationality:'CL',action:{trigger:'before_duel',description:'Once per game, ignore one player’s out-of-position penalty for one duel.'}}
+].map(coach=>({...coach,edition:'printable-expansion'}));
+const COACHES = [...BASE_COACHES,...EXTRA_COACHES];
 const DUELS = [...FIELD_DUELS,...GOAL_DUELS];
 const SPECIAL_CARDS = SPECIALS.flatMap(card => Array.from({length:card.quantity},(_,copy)=>({...card,copy:copy+1})));
-export {COACHES, DUELS, FIELD_DUELS, GOAL_DUELS, SPECIALS, SPECIAL_CARDS};
+export {COACHES, BASE_COACHES, EXTRA_COACHES, DUELS, FIELD_DUELS, GOAL_DUELS, SPECIALS, SPECIAL_CARDS};

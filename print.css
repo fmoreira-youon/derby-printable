@@ -53,3 +53,13 @@
 
 .coach-nationality{display:flex;align-items:center;gap:2mm;color:#d8deec;font-size:7.2pt;font-weight:700}.coach-nationality .flag{position:static;width:7mm;height:7mm;border-radius:50%;object-fit:cover}
 #coach-settings{flex:1 0 100%;border-top:1px solid #ffffff20;padding-top:15px}#coach-settings summary{cursor:pointer;font-size:13px;color:#e8edf8}#coach-settings p{font-size:12px;line-height:1.5;color:#b5bfd5}#coach-nationalities{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}
+
+.collection-emblem .goal-icon{display:block;width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1)}
+.pitch-field{position:absolute;left:0;width:380mm;height:310mm}
+.coach-bench{position:absolute;left:0;width:378mm;height:70mm;display:flex;align-items:center;gap:24mm;padding:3mm 10mm;background:#102e2c;border-top:.35mm solid #b3cdff}
+.coach-bench.red-bench{transform:rotate(180deg);border-color:#edb3bc}
+.bench-coach-slot{width:88mm;height:63mm;border:.5mm solid #b3cdff;border-radius:3mm;background:#071d2299;flex-shrink:0;position:relative}
+.red-bench .bench-coach-slot{border-color:#edb3bc}
+.bench-coach-slot>span{position:absolute;top:3mm;left:0;right:0;text-align:center;font-size:8pt;letter-spacing:1px}
+.bench-reserves{display:flex;flex-direction:column;gap:5mm}.bench-reserves>p{font-size:8pt;letter-spacing:1px;margin:0;text-align:center}
+.bench-token-row{display:flex;gap:12mm}.bench-token-slot{width:25mm;height:25mm;border:.4mm dashed #d4bd6f;border-radius:50%;display:grid;place-items:center;background:#071d224d}.bench-token-slot>span{font-size:8pt;color:#d4bd6f}

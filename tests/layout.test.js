@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {paginate,reverseSheet,boardTiles,gridFor} from '../layout.js';
+import {paginate,reverseSheet,boardTiles,gridFor,boardGeometry} from '../layout.js';
 import {DECK1_PLAYERS,DECK2_PLAYERS} from '../data/decks.js';
 test('both complete source decks retain all 36 unique players and goalkeeper attributes',()=>{
   for(const deck of [DECK1_PLAYERS,DECK2_PLAYERS]) {
@@ -24,10 +24,10 @@ for(const paper of ['a3','a4']) {
  });
 }
 
-import {COACHES,DUELS,FIELD_DUELS,GOAL_DUELS,SPECIALS,SPECIAL_CARDS} from '../data/collections.js';
+import {COACHES,BASE_COACHES,EXTRA_COACHES,DUELS,FIELD_DUELS,GOAL_DUELS,SPECIALS,SPECIAL_CARDS} from '../data/collections.js';
 import {matchTokens,tokenOrder,tokenArt,tokenSlots} from '../artwork.js';
 test('collections preserve seed counts, copy quantities and action associations',()=>{
- assert.equal(COACHES.length,7);assert.equal(FIELD_DUELS.length,50);assert.equal(GOAL_DUELS.length,40);assert.equal(DUELS.length,90);assert.equal(SPECIAL_CARDS.length,30);
+ assert.equal(COACHES.length,16);assert.equal(FIELD_DUELS.length,50);assert.equal(GOAL_DUELS.length,40);assert.equal(DUELS.length,90);assert.equal(SPECIAL_CARDS.length,30);
  assert.match(COACHES[0].action.description,/draw/);assert.match(COACHES[6].action.description,/automatically/);
  for(const s of SPECIALS)assert.equal(SPECIAL_CARDS.filter(c=>c.name===s.name).length,s.quantity);
  for(const duel of DUELS)assert.equal(duel.duelAttributes.length,2);
@@ -93,4 +93,21 @@ test('every printed duel and special effect has a translated timing label',()=>{
  assert.equal(triggerLabel('duel_resolved','en'),'On duel end');
  assert.equal(triggerLabel('duel_draw','pt'),'Em caso de empate');
  assert.equal(triggerLabel('immediate','en'),'Immediate');
+});
+
+test('coach sheet is full in A3 and supplied base nationalities are exact',()=>{
+ assert.deepEqual(BASE_COACHES.map(c=>[c.name,c.nationality]),[
+  ['José Santos','PT'],['Mário João','BR'],['Rafael Passos','PT'],['Emílio Pateiro','ES'],
+  ['Osvaldo Oliva','MX'],['Nick Role','EN'],['Martin Callado','AR']
+ ]);
+ assert.equal(EXTRA_COACHES.length,9);assert.equal(new Set(COACHES.map(c=>c.name)).size,16);
+ const sheets=paginate(COACHES,'a3');assert.equal(sheets.length,1);assert.ok(sheets[0].every(Boolean));
+ for(const coach of EXTRA_COACHES){assert.equal(coach.edition,'printable-expansion');assert.ok(PT[coach.action.description]);}
+});
+for(const paper of ['a3','a4'])test(`${paper}: benches retain sheet count, physical scale and 10 mm joins`,()=>{
+ const compact=boardTiles(paper),expanded=boardTiles(paper,true),geometry=boardGeometry(true);
+ assert.equal(expanded.length,compact.length);assert.equal(geometry.height,450);
+ assert.equal(expanded[0].height-expanded[expanded.length-1].y,10);
+ for(let y=0;y<450;y++)for(let x=0;x<380;x++)assert.ok(expanded.some(t=>x>=t.x&&x<t.x+t.width&&y>=t.y&&y<t.y+t.height));
+ for(const tile of expanded){assert.ok(tile.height<=230);assert.ok(tile.width<=(paper==='a4'?195:380));}
 });

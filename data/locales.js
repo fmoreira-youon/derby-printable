@@ -249,3 +249,16 @@ Object.assign(PT, {
 export function triggerLabel(trigger, language = 'en') {
  return translate(TRIGGER_LABELS[trigger] ?? String(trigger ?? '').replaceAll('_',' '), language);
 }
+
+Object.assign(PT, {
+  "Once per game, give your player +2 Pace for one duel.": "Uma vez por jogo, o teu jogador ganha +2 de Rapidez durante um duelo.",
+  "Once per game, give your player +2 Mental for one duel.": "Uma vez por jogo, o teu jogador ganha +2 de Mental durante um duelo.",
+  "Start the game with one additional player card in your hand.": "Começa o jogo com uma carta jogador adicional na mão.",
+  "Once per game, after losing a field duel, take the Derby Star token.": "Uma vez por jogo, após perderes um duelo de campo, fica com o token Estrela Derby.",
+  "Your captain gains +1 Overall while you hold the Derby Star token.": "O teu capitão ganha +1 de Overall enquanto tiveres o token Estrela Derby.",
+  "After conceding a goal, draw one player card.": "Depois de sofreres um golo, tira uma carta jogador.",
+  "Once per game, swap two of your players on the pitch before a duel.": "Uma vez por jogo, troca dois dos teus jogadores no campo antes de um duelo.",
+  "Once per game, after winning a field duel, draw a special card.": "Uma vez por jogo, após ganhares um duelo de campo, tira uma carta especial.",
+  "Once per game, ignore one player’s out-of-position penalty for one duel.": "Uma vez por jogo, ignora a penalização por posição de um jogador durante um duelo.",
+  "SUBSTITUTIONS": "SUBSTITUIÇÕES"
+});

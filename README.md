@@ -15,7 +15,7 @@ Static-host-compatible hash routes also work under a GitHub Pages project path:
 | `#/print/decks/red` | 36 default red players |
 | `#/print/board` | Five zones, each with red player, duel and blue player slots |
 | `#/print/tokens` | 10 substitutions, 2 captains, 1 Derby star, 1 ball |
-| `#/print/coaches` | 7 coaches |
+| `#/print/coaches` | 16 coaches: 7 base + 9 print-edition proposals |
 | `#/print/duels` | 50 field + 40 goal duels, with deck filter |
 | `#/print/specials` | 30 cards, including repeated copies from the source |
 
@@ -39,7 +39,8 @@ Dotted guides sit 1 mm outside the card edge. Cut the actual card boundary,
 using the guides to locate it. This is a home-print layout without professional
 bleed. A4 card sheets require no more than 7.5 mm side margins.
 
-The pitch assembles to 380 × 310 mm, with fifteen full-size card slots. Print
+The pitch defaults to 380 × 450 mm with coach/substitution areas; disable them
+for the compact 380 × 310 mm version. Both have fifteen full-size player/duel slots. Print
 on **two A3 landscape sheets** (top/bottom), or **four A4 portrait sheets**
 (top left, top right, bottom left, bottom right). Each join repeats 10 mm of
 artwork: trim blank paper, align the repeated artwork, then tape/glue the overlap.
@@ -102,7 +103,7 @@ without a decorative star. Card dimensions and source rules are unchanged.
 
 ## Print everything
 
-`#/print/all` combines both player decks, all 7 coaches, all 90 duels,
+`#/print/all` combines both player decks, all 16 coaches, all 90 duels,
 30 special-card copies, 14 tokens and the full-size pitch. The duel filter
 does not reduce the complete kit. Player background, nationality and deck-name
 options apply to both decks.
@@ -112,7 +113,7 @@ a separate physical sheet. Fronts only includes the pitch; backs only omits it.
 A3 PDFs combine portrait card/token pages with landscape pitch pages; save
 as PDF first, then print at actual size with automatic page orientation.
 A4 uses portrait throughout. The complete duplex kit is 36 PDF pages in A3
-or 56 in A4, including intentional blank pitch reverses.
+or 58 in A4, including intentional blank pitch reverses.
 
 ## Print language
 
@@ -125,13 +126,30 @@ triggers and quantities use one data source. Proper names remain unchanged.
 
 ## Coach nationalities and timing labels
 
-The original coach seed does not assign nationalities. On Coaches or Print
-everything, expand **Coach nationalities** and select each country. Selections
-are remembered in this browser and add the nationality code and circular flag
-to the front of each coach card. Unassigned coaches print without a flag.
+The seven base coaches use the nationalities supplied in the reference image:
+José Santos PT, Mário João BR, Rafael Passos PT, Emílio Pateiro ES, Osvaldo
+Oliva MX, Nick Role EN and Martin Callado AR. Nine additional fictional coaches
+with new PT/EN abilities fill one full A3 front sheet (16 cards), plus its back.
+They carry `edition: 'printable-expansion'` in the data: these are optional
+print-edition proposals, not additions to the digital game or tested balance.
+
+On Coaches or Print everything, **Coach nationalities** lets you override these
+prefilled countries. A new local-storage key resets the old unassigned settings;
+new overrides are remembered in this browser. Unassigned coaches omit the flag.
 
 Duel and special effects show their actual action trigger as a readable timing
 label in PT/EN. Duel variant subtitles are omitted: `(1)` and `(2)` are source
 copy identifiers, not rules. `GK advances` marks the card whose effect advances
 a winning goalkeeper directly to midfield; its full rule remains printed.
-The redesigned goal icon uses a goal frame, perspective and a fine net.
+Goal Duel uses the supplied `baliza.svg`, stored unchanged as `resources/goal.svg`.
+
+## Coach and substitution areas on the pitch
+
+**Coach + substitution areas** is on by default on the Pitch and Print everything
+routes. Each side has one 88 × 63 mm coach slot (place the card sideways) and
+five 25 mm substitution-token slots. The red area is rotated for its player.
+
+The expanded pitch is 380 × 450 mm. It still uses **2 A3 landscape or 4 A4
+portrait sheets**, with 10 mm joins and full-size card/token spaces. Tiles are
+230 mm high. Turn the checkbox off for the original 380 × 310 mm compact pitch.
+The expanded area changes the assembled board size, not its sheet count.

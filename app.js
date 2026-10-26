@@ -2,7 +2,7 @@ import { translate, triggerLabel } from './data/locales.js';
 import { DECK1_PLAYERS, DECK2_PLAYERS } from './data/decks.js';
 import { COACHES, DUELS, SPECIAL_CARDS } from './data/collections.js';
 import { logo, tokenArt, matchTokens, tokenOrder, tokenSlots } from './artwork.js';
-import { gridFor, paginate, reverseSheet, boardTiles } from './layout.js';
+import { gridFor, paginate, reverseSheet, boardTiles, boardGeometry } from './layout.js';
 
 const views = {
   all: { title: 'Print everything', route: '/print/all' },
@@ -19,13 +19,13 @@ const flags = { PT:'portugal', IT:'italia', FR:'franca', ES:'espanha', EN:'ingla
 Object.assign(flags,{AU:'australia',AT:'austria',CA:'canada',CN:'china',CO:'colombia',DK:'dinamarca',EG:'egito',FI:'finlandia',GR:'grecia',IS:'islandia',JP:'japao',KR:'coreia-sul',LU:'luxemburgo',MA:'marrocos',NO:'noruega',PL:'polonia',RO:'romenia',RU:'russia',SC:'escocia',RS:'servia',SE:'suecia',CH:'suica',UA:'ucrania',UY:'uruguai',WA:'gales'});
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const form = document.querySelector('#options');
-const coachStorageKey = 'derby-print-coach-nationalities-v1';
+const coachStorageKey = 'derby-print-coach-nationalities-v2';
 let savedNationalities = {};
 try { savedNationalities = JSON.parse(localStorage.getItem(coachStorageKey) || '{}') || {}; } catch {}
 const countryNames = new Intl.DisplayNames(['en'],{type:'region'});
 const countryName = code => ({EN:'England',SC:'Scotland',WA:'Wales'}[code] || countryNames.of(code));
 const countries = Object.keys(flags).sort((a,b)=>countryName(a).localeCompare(countryName(b)));
-document.querySelector('#coach-nationalities').innerHTML = COACHES.map((coach,index)=>`<label>${escape(coach.name)}<select name="coach-nationality-${index}" data-coach-name="${escape(coach.name)}"><option value="">Not assigned</option>${countries.map(code=>`<option value="${code}" ${savedNationalities[coach.name]===code?'selected':''}>${escape(countryName(code))} · ${code}</option>`).join('')}</select></label>`).join('');
+document.querySelector('#coach-nationalities').innerHTML = COACHES.map((coach,index)=>`<label>${escape(coach.name)}<select name="coach-nationality-${index}" data-coach-name="${escape(coach.name)}"><option value="">Not assigned</option>${countries.map(code=>`<option value="${code}" ${(Object.hasOwn(savedNationalities,coach.name)?savedNationalities[coach.name]:coach.nationality)===code?'selected':''}>${escape(countryName(code))} · ${code}</option>`).join('')}</select></label>`).join('');
 const sheets = document.querySelector('#sheets');
 const initialSide = new URLSearchParams(location.search).get('side');
 if (['front','back'].includes(initialSide)) form.elements.sides.value = initialSide;
@@ -62,12 +62,17 @@ function renderDeck(view, options) {
     return page(`<div class="card-grid" style="--columns:${columns}">${ordered.map(p=>card(p,view.color,isBack,isBack && edge==='short')).join('')}</div>`,`${tr(view.title)} · sheet ${i+1} · ${side}`,paper);
   })).join('');
 }
-function pitch() {
+function bench(side, top) {
+  return `<div class="coach-bench ${side}-bench" style="top:${top}mm"><div class="bench-coach-slot"><span>${tr('COACH')}</span></div><div class="bench-reserves"><p>${tr('SUBSTITUTIONS')}</p><div class="bench-token-row">${Array.from({length:5},(_,i)=>`<div class="bench-token-slot"><span>${i+1}</span></div>`).join('')}</div></div></div>`;
+}
+function pitch(benches = false) {
   const labels = ['Goalkeeper','Defense','Midfield','Attacking midfield','Attack'];
-  return `<div class="pitch"><div class="pitch-line"></div><div class="pitch-circle"></div><div class="pitch-brand">${logo()} <span>${tr('BLUE')} → &nbsp; ${tr('MATCH PITCH')} &nbsp; ← ${tr('RED')}</span></div>${labels.map((name,i)=>`<div class="pitch-column" style="left:${10+i*72}mm"><div class="slot red-slot"><span>${tr(labels[4-i])}</span></div><div class="slot duel-slot"><span>${tr('DUEL')} ${i+1}</span></div><div class="slot blue-slot"><span>${tr(name)}</span></div></div>`).join('')}<div class="pitch-end">PRINT & PLAY · 380 × 310 mm</div></div>`;
+  const {height,fieldTop}=boardGeometry(benches);
+  return `<div class="pitch" style="height:${height}mm"><div class="pitch-field" style="top:${fieldTop}mm"><div class="pitch-line"></div><div class="pitch-circle"></div><div class="pitch-brand">${logo()} <span>${tr('BLUE')} → &nbsp; ${tr('MATCH PITCH')} &nbsp; ← ${tr('RED')}</span></div>${labels.map((name,i)=>`<div class="pitch-column" style="left:${10+i*72}mm"><div class="slot red-slot"><span>${tr(labels[4-i])}</span></div><div class="slot duel-slot"><span>${tr('DUEL')} ${i+1}</span></div><div class="slot blue-slot"><span>${tr(name)}</span></div></div>`).join('')}<div class="pitch-end">PRINT & PLAY · 380 × ${height} mm</div></div>${benches?bench('red',0)+bench('blue',380):''}</div>`;
 }
 function renderBoard(paper, duplex = false) {
-  return boardTiles(paper).flatMap((t,i)=>[page(`<div class="tile" style="width:${t.width}mm;height:${t.height}mm"><div class="tile-art" style="left:-${t.x}mm;top:-${t.y}mm">${pitch()}</div></div><p class="assembly">${tr('tile')} ${i+1} · ${tr(paper==='a4'?'2 × 2 layout: 1 2 / 3 4':'Top / bottom: 1 / 2')} · ${tr('overlap matching artwork by 10 mm.')}</p>`,`Pitch · tile ${i+1}`,paper,'board'), ...(duplex ? [page('',`Pitch · tile ${i+1} · blank reverse`,paper,'board blank')] : [])]).join('');
+  const benches=form.elements.benches.checked;
+  return boardTiles(paper,benches).flatMap((t,i)=>[page(`<div class="tile" style="width:${t.width}mm;height:${t.height}mm"><div class="tile-art" style="left:-${t.x}mm;top:-${t.y}mm">${pitch(benches)}</div></div><p class="assembly">${tr('tile')} ${i+1} · ${tr(paper==='a4'?'2 × 2 layout: 1 2 / 3 4':'Top / bottom: 1 / 2')} · ${tr('overlap matching artwork by 10 mm.')}</p>`,`Pitch · tile ${i+1}`,paper,'board'), ...(duplex ? [page('',`Pitch · tile ${i+1} · blank reverse`,paper,'board blank')] : [])]).join('');
 }
 function renderTokens(paper,sides,edge) {
   const tokens=tokenSlots(matchTokens());
@@ -78,6 +83,7 @@ function renderTokens(paper,sides,edge) {
 }
 const attributeNames={physicality:'Physical',technique:'Technique',pace:'Pace',tackle:'Tackling',mental:'Mental',finishing:'Shooting',overall:'Overall',exits:'Exits',handling:'Handling',reflexes:'Reflexes'};
 function collectionIcon(type) {
+  if(type==='goal') return '<img class="goal-icon" src="resources/goal.svg" alt="">';
   const shapes = {
     coach:'<rect x="6" y="4" width="20" height="25" rx="3"/><path d="M12 4V2h8v2M11 11h10M11 16h4M18 22l5-5M19 17h4v4"/><circle cx="12" cy="23" r="2"/>',
     field:'<rect x="3" y="6" width="26" height="20" rx="2"/><path d="M16 6v20M3 12h5v8H3M29 12h-5v8h5"/><circle cx="16" cy="16" r="4"/>',
@@ -94,7 +100,7 @@ function collectionCard(item,type,back,rotate) {
   if(back) body=`<div class="collection-back-frame"></div>${type==='coach'?`<div class="back-emblem">${collectionIcon('coach')}</div>`:''}<div class="back-brand">${logo()}</div><span class="back-team">${tr(label)}</span>`;
   else {
     const coachIndex=type==='coach'?COACHES.indexOf(item):-1;
-    const nationality=coachIndex>=0 ? form.elements.namedItem(`coach-nationality-${coachIndex}`).value || item.nationality : '';
+    const nationality=coachIndex>=0 ? form.elements.namedItem(`coach-nationality-${coachIndex}`).value : '';
     const coachNationality=nationality&&flags[nationality]?`<div class="coach-nationality"><span>${escape(nationality)}</span><img class="flag" src="resources/flags/${flags[nationality]}.svg" alt="${escape(countryName(nationality))}"></div>`:'';
     const top=`<header class="collection-heading"><p class="category">${tr(label)}</p>${type==='special'?'':coachNationality||`<div class="collection-emblem">${collectionIcon(kind)}</div>`}</header>`;
     if(type==='duel') {
@@ -158,12 +164,13 @@ function render() {
   document.querySelectorAll('.duplex-option').forEach(el=>el.hidden=!duplex);
   document.querySelectorAll('.player-option').forEach(el=>el.hidden=!(view.players||all));
   document.querySelector('.duel-option').hidden=view!==views.duels;
+  document.querySelector('.board-option').hidden=!(all||view===views.board);
   document.querySelector('#view-title').textContent=view.title;
   document.querySelector('#print-help').textContent=all
     ? 'Complete kit: both player decks, all coaches, field and goal duels, special cards, 14 tokens and the pitch. Fronts + backs includes blank pitch reverses for duplex printing. Backs only omits the pitch. A3 uses portrait card sheets and landscape pitch tiles: save as PDF to preserve mixed orientations, then print at actual size. Card text uses the selected print language.'
     : isCards
     ? 'Portrait. For fronts + backs, print double-sided using the selected binding edge. Test the first pair of sheets before printing the full deck. Card text uses the selected print language.'
-    : view===views.board ? `${paper==='a3'?'A3 landscape · 2 sheets':'A4 portrait · 4 sheets'}. Trim the blank margins, then align the repeated artwork with a 10 mm overlap. Final pitch: 380 × 310 mm. Slots fit 63 × 88 mm cards.`
+    : view===views.board ? `${paper==='a3'?'A3 landscape · 2 sheets':'A4 portrait · 4 sheets'}. Trim the blank margins, then align the repeated artwork with a 10 mm overlap. Final pitch: 380 × ${boardGeometry(form.elements.benches.checked).height} mm. ${form.elements.benches.checked?'Coach cards sit sideways (88 × 63 mm); five 25 mm substitution slots per side. ':''}Player slots fit 63 × 88 mm cards.`
     : 'Portrait. 14 tokens: 10 substitutions, 1 Derby star, 1 ball, 1 blue captain and 1 red captain. Print double-sided with the selected binding. Derby logo on the star front, star on its back; other tokens match on both sides. Test the first sheet before cutting the 25 mm circles.';
   const content = all ? renderAll(options) : view.players ? renderDeck(view,options) : view.cards ? renderCollection(view,options) : view===views.board ? renderBoard(paper) : renderTokens(paper,sides,edge);
   sheets.innerHTML=content;
