@@ -25,18 +25,18 @@ for(const paper of ['a3','a4']) {
 }
 
 import {COACHES,BASE_COACHES,EXTRA_COACHES,DUELS,FIELD_DUELS,GOAL_DUELS,SPECIALS,SPECIAL_CARDS} from '../data/collections.js';
-import {matchTokens,tokenOrder,tokenArt,tokenSlots} from '../artwork.js';
+import {matchTokens,tokenOrder,tokenArt,tokenSlots,tokenGridFor,fillTokenSheet} from '../artwork.js';
 test('collections preserve seed counts, copy quantities and action associations',()=>{
  assert.equal(COACHES.length,16);assert.equal(FIELD_DUELS.length,50);assert.equal(GOAL_DUELS.length,40);assert.equal(DUELS.length,90);assert.equal(SPECIAL_CARDS.length,30);
  assert.match(COACHES[0].action.description,/draw/);assert.match(COACHES[6].action.description,/automatically/);
  for(const s of SPECIALS)assert.equal(SPECIAL_CARDS.filter(c=>c.name===s.name).length,s.quantity);
  for(const duel of DUELS)assert.equal(duel.duelAttributes.length,2);
 });
-test('exact match token set: 10 substitutions, two captains, one Derby and one ball',()=>{
- const tokens=matchTokens();assert.equal(tokens.length,14);
+test('exact match token set: 10 substitutions, two captains, one Derby and three balls',()=>{
+ const tokens=matchTokens();assert.equal(tokens.length,16);
  assert.equal(tokens.filter(t=>t.type==='sub').length,10);
  assert.equal(tokens.filter(t=>t.type==='derby').length,1);
- assert.equal(tokens.filter(t=>t.type==='ball').length,1);
+ assert.equal(tokens.filter(t=>t.type==='ball').length,3);
  for(const type of ['captain-blue','captain-red']) {
   assert.equal(tokens.filter(t=>t.type===type).length,1);
   assert.equal(tokenArt(type,false),tokenArt(type,true));
@@ -53,11 +53,11 @@ for(const edge of ['long','short'])test(`token backs register for ${edge}-edge b
 
 test('token partial row preserves physical blank positions',()=>{
  const slots=tokenSlots(matchTokens());assert.equal(slots.length,18);
- assert.equal(slots.filter(Boolean).length,14);
- assert.deepEqual(slots.slice(14),[null,null,null,null]);
+ assert.equal(slots.filter(Boolean).length,16);
+ assert.deepEqual(slots.slice(16),[null,null]);
  assert.equal(tokenOrder(slots,'long')[12],null);
- assert.equal(tokenOrder(slots,'long')[17].id,'captain-blue');
- assert.equal(tokenOrder(slots,'short')[0].id,'captain-blue');
+ assert.equal(tokenOrder(slots,'long')[15].id,'captain-blue');
+ assert.equal(tokenOrder(slots,'short')[0].id,'ball-2');
 });
 
 test('all card descriptions and non-person card names use English copy',()=>{
@@ -112,4 +112,18 @@ for(const paper of ['a3','a4'])for(const [benches,piles] of [[false,false],[true
  assert.equal(tiles[0].height-tiles[tiles.length-1].y,10);
  for(let y=0;y<geometry.height;y++)for(let x=0;x<380;x++)assert.ok(tiles.some(t=>x>=t.x&&x<t.x+t.width&&y>=t.y&&y<t.y+t.height));
  for(const tile of tiles){assert.ok(tile.height<=245);assert.ok(tile.width<=(paper==='a4'?195:380));}
+});
+
+for(const paper of ['a3','a4'])test(`${paper}: token sheets fill capacity with unique copies and registered reverses`,()=>{
+ const tokens=fillTokenSheet(paper),{columns,capacity}=tokenGridFor(paper);
+ assert.equal(tokens.length,paper==='a3'?80:42);assert.equal(tokens.length,capacity);
+ assert.equal(new Set(tokens.map(t=>t.id)).size,capacity);
+ const base=matchTokens();
+ assert.deepEqual(tokens.slice(0,base.length).map(t=>[t.type,t.label]),base.map(t=>[t.type,t.label]));
+ assert.ok(tokens.filter(t=>t.type==='ball').length>=3);
+ for(const edge of ['long','short']) {
+  const backs=tokenOrder(tokens,edge,columns);
+  assert.ok(backs.every(Boolean));assert.deepEqual(tokenOrder(backs,edge,columns),tokens);
+  assert.equal(backs[0].id,tokens[edge==='long'?columns-1:capacity-columns].id);
+ }
 });

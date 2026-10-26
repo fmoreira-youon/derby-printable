@@ -14,7 +14,7 @@ Static-host-compatible hash routes also work under a GitHub Pages project path:
 | `#/print/decks/blue` | 36 default blue players |
 | `#/print/decks/red` | 36 default red players |
 | `#/print/board` | Five zones, each with red player, duel and blue player slots |
-| `#/print/tokens` | 10 substitutions, 2 captains, 1 Derby star, 1 ball |
+| `#/print/tokens` | Full token sheet with spares · 80 in A3 / 42 in A4 |
 | `#/print/coaches` | 16 coaches: 7 base + 9 print-edition proposals |
 | `#/print/duels` | 50 field + 40 goal duels, with deck filter |
 | `#/print/specials` | 30 cards, including repeated copies from the source |
@@ -46,10 +46,13 @@ on **two A3 landscape sheets** (top/bottom), or **four A4 portrait sheets**
 artwork: trim blank paper, align the repeated artwork, then tape/glue the overlap.
 A single A3 cannot fit three 88 mm card rows plus labels and safe margins.
 
-Tokens are 25 mm diameter. Exactly 14 physical tokens are supplied, with 14
-fronts and 14 registered backs. Substitution, captain and ball faces match; the Derby
-star has the Derby logo on its front and a star on its reverse, both with a navy background and gold ring. All ten
-substitutions use the same yellow reference design.
+Tokens are 25 mm diameter. The base set has 10 substitutions, 1 Derby star,
+3 balls and 2 captains (16 tokens). Output repeats this set to fill one full
+front sheet and its registered reverse: **80 tokens in A3** or **42 in A4**.
+Each copy has a unique imposition ID so the logo/star faces stay matched.
+Substitution, captain and ball faces match. The Derby logo and star are slightly
+smaller, with the same navy background and gold ring. The sheet includes spares;
+the token quantities are print quantities, not changes to the game rules.
 
 ## Player card options
 
@@ -104,7 +107,7 @@ without a decorative star. Card dimensions and source rules are unchanged.
 ## Print everything
 
 `#/print/all` combines both player decks, all 16 coaches, all 90 duels,
-30 special-card copies, 14 tokens and the full-size pitch. The duel filter
+30 special-card copies, a full token sheet with spares and the full-size pitch. The duel filter
 does not reduce the complete kit. Player background, nationality and deck-name
 options apply to both decks.
 

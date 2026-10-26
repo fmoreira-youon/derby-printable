@@ -1,7 +1,7 @@
 import { translate, triggerLabel } from './data/locales.js';
 import { DECK1_PLAYERS, DECK2_PLAYERS } from './data/decks.js';
 import { COACHES, DUELS, SPECIAL_CARDS } from './data/collections.js';
-import { logo, tokenArt, matchTokens, tokenOrder, tokenSlots } from './artwork.js';
+import { logo, tokenArt, tokenOrder, tokenGridFor, fillTokenSheet } from './artwork.js';
 import { gridFor, paginate, reverseSheet, boardTiles, boardGeometry } from './layout.js';
 
 const views = {
@@ -94,10 +94,10 @@ function renderBoard(paper, duplex = false) {
   return boardTiles(paper,benches,piles).flatMap((t,i)=>[page(`<div class="tile" style="width:${t.width}mm;height:${t.height}mm"><div class="tile-art" style="left:-${t.x}mm;top:-${t.y}mm">${pitch(benches,piles)}</div></div><p class="assembly">${tr('tile')} ${i+1} · ${tr(paper==='a4'?'2 × 2 layout: 1 2 / 3 4':'Top / bottom: 1 / 2')} · ${tr('overlap matching artwork by 10 mm.')}</p>`,`Pitch · tile ${i+1}`,paper,'board'), ...(duplex ? [page('',`Pitch · tile ${i+1} · blank reverse`,paper,'board blank')] : [])]).join('');
 }
 function renderTokens(paper,sides,edge) {
-  const tokens=tokenSlots(matchTokens());
+  const tokens=fillTokenSheet(paper), {columns,rows}=tokenGridFor(paper);
   return (sides==='both'?['front','back']:[sides]).map(side=>{
-    const back=side==='back', ordered=back?tokenOrder(tokens,edge):tokens;
-    return page(`<div class="token-grid">${ordered.map(t=>t?`<div class="token-cell ${back&&edge==='short'?'rotate':''}" data-token-id="${t.id}">${tokenArt(t.type,back)}<small>${tr(t.label)}</small></div>`:'<div class="token-cell token-empty" aria-hidden="true"></div>').join('')}</div>`,`Tokens · ${side}`,paper,'tokens');
+    const back=side==='back', ordered=back?tokenOrder(tokens,edge,columns):tokens;
+    return page(`<div class="token-grid" style="--token-columns:${columns};--token-rows:${rows}">${ordered.map(t=>t?`<div class="token-cell ${back&&edge==='short'?'rotate':''}" data-token-id="${t.id}">${tokenArt(t.type,back)}<small>${tr(t.label)}</small></div>`:'<div class="token-cell token-empty" aria-hidden="true"></div>').join('')}</div>`,`Tokens · ${side}`,paper,'tokens');
   }).join('');
 }
 const attributeNames={physicality:'Physical',technique:'Technique',pace:'Pace',tackle:'Tackling',mental:'Mental',finishing:'Shooting',overall:'Overall',exits:'Exits',handling:'Handling',reflexes:'Reflexes'};
@@ -159,7 +159,7 @@ function render() {
   const path = location.hash.slice(1).replace(/\/$/,'') || '/print';
   currentView = Object.values(views).find(v=>v.route===path);
   const home = path==='/print';
-  document.querySelector('#navigation').innerHTML = Object.values(views).map((v,i)=>`<a class="nav-card ${currentView===v?'active':''}" href="#${v.route}" ${currentView===v?'aria-current="page"':''}><span>0${i+1}</span><strong>${v.title}</strong><small>${v.players?`${v.players.length} player cards`:v.cards?`${v.cards.length} cards`:v===views.all?'Both decks, all cards, tokens + pitch':v===views.board?'Five zones. One match.':'14 tokens · fronts + backs'}</small></a>`).join('');
+  document.querySelector('#navigation').innerHTML = Object.values(views).map((v,i)=>`<a class="nav-card ${currentView===v?'active':''}" href="#${v.route}" ${currentView===v?'aria-current="page"':''}><span>0${i+1}</span><strong>${v.title}</strong><small>${v.players?`${v.players.length} player cards`:v.cards?`${v.cards.length} cards`:v===views.all?'Both decks, all cards, tokens + pitch':v===views.board?'Five zones. One match.':'Full token sheets · spares included'}</small></a>`).join('');
   const view = currentView;
   document.querySelector('.workspace').hidden = !view;
   document.querySelector('#error').hidden = true;
@@ -186,11 +186,11 @@ function render() {
   document.querySelectorAll('.board-option').forEach(el=>el.hidden=!(all||view===views.board));
   document.querySelector('#view-title').textContent=view.title;
   document.querySelector('#print-help').textContent=all
-    ? 'Complete kit: both player decks, all coaches, field and goal duels, special cards, 14 tokens and the pitch. Fronts + backs includes blank pitch reverses for duplex printing. Backs only omits the pitch. A3 uses portrait card sheets and landscape pitch tiles: save as PDF to preserve mixed orientations, then print at actual size. Card text uses the selected print language.'
+    ? 'Complete kit: both player decks, all coaches, field and goal duels, special cards, a full token sheet with spares and the pitch. Fronts + backs includes blank pitch reverses for duplex printing. Backs only omits the pitch. A3 uses portrait card sheets and landscape pitch tiles: save as PDF to preserve mixed orientations, then print at actual size. Card text uses the selected print language.'
     : isCards
     ? 'Portrait. For fronts + backs, print double-sided using the selected binding edge. Test the first pair of sheets before printing the full deck. Card text uses the selected print language.'
     : view===views.board ? `${paper==='a3'?'A3 landscape · 2 sheets':'A4 portrait · 4 sheets'}. Trim the blank margins, then align the repeated artwork with a 10 mm overlap. Final pitch: 380 × ${boardGeometry(form.elements.benches.checked,form.elements.piles.checked).height} mm. ${form.elements.benches.checked?'Coaches sit upright (63 × 88 mm); five 25 mm substitution slots per side. ':''}${form.elements.piles.checked?'Includes two player decks and shared field-duel, goal-duel and special-card piles. ':''}All card slots are 63 × 88 mm.`
-    : 'Portrait. 14 tokens: 10 substitutions, 1 Derby star, 1 ball, 1 blue captain and 1 red captain. Print double-sided with the selected binding. Derby logo on the star front, star on its back; other tokens match on both sides. Test the first sheet before cutting the 25 mm circles.';
+    : `Portrait. ${tokenGridFor(paper).capacity} tokens with spares, repeated to fill the sheet. Each base set has 10 substitutions, 1 Derby star, 3 balls and 2 captains. Print double-sided using the selected binding. The Derby token has the logo on its front and a star on its back; other tokens match on both sides. Test a sheet pair before cutting the 25 mm circles.`;
   const content = all ? renderAll(options) : view.players ? renderDeck(view,options) : view.cards ? renderCollection(view,options) : view===views.board ? renderBoard(paper) : renderTokens(paper,sides,edge);
   sheets.innerHTML=content;
   sheets.lang=language;
