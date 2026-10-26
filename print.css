@@ -74,3 +74,9 @@
 /* Keep the outer frame inside the artwork without clipping edge card slots. */
 .pitch{border:0;box-shadow:inset 0 0 0 .5mm #f0e9cd}
 .coach-bench{width:380mm}
+
+/* Centre the coach and one token row when deck/pile spaces are disabled. */
+.coach-bench.without-piles{justify-content:center;gap:24mm}
+.without-piles .bench-reserves{width:173mm;margin-left:0;position:relative;display:block}
+.without-piles .bench-reserves>p{position:absolute;bottom:calc(100% + 4mm);left:0;right:0}
+.without-piles .bench-token-row{grid-template-columns:repeat(5,25mm);gap:12mm}

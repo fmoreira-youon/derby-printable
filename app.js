@@ -69,7 +69,7 @@ function bench(side, top, benches, piles) {
   const coach=benches?`<div class="bench-coach-slot"><span>${tr('COACH')}</span></div>`:'';
   const decks=piles?pileSlot('PLAYER DECK')+(side==='red'?pileSlot('FIELD DUELS')+pileSlot('GOAL DUELS'):pileSlot('SPECIAL CARDS')):'';
   const tokens=benches?`<div class="bench-reserves"><p>${tr('SUBSTITUTIONS')}</p><div class="bench-token-row">${Array.from({length:5},(_,i)=>`<div class="bench-token-slot"><span>${i+1}</span></div>`).join('')}</div></div>`:'';
-  return `<div class="coach-bench ${side}-bench" style="top:${top}mm"><div class="bench-card-group">${coach}${decks}</div>${tokens}</div>`;
+  return `<div class="coach-bench ${side}-bench ${piles?'':'without-piles'}" style="top:${top}mm"><div class="bench-card-group">${coach}${decks}</div>${tokens}</div>`;
 }
 function pitchMarkings(height) {
   const cy=height/2;
