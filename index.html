@@ -4,18 +4,25 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DERBY — Print & Play</title><link rel="stylesheet" href="print.css">
 </head><body>
-<header class="site-header"><a href="#/print" class="brand">DERBY<span>PRINT & PLAY</span></a><span class="edition">THE GAME. AT YOUR TABLE.</span></header>
+<header class="site-header"><a href="#/print" class="brand"><img class="derby-logo" src="resources/derby-logo.png" alt="DERBY — The Card Game"><span>PRINT & PLAY</span></a><span class="edition">THE GAME. AT YOUR TABLE.</span></header>
 <main>
 <section class="intro"><p class="eyebrow">BUILD YOUR MATCHDAY</p><h1>From the screen.<br><em>To your table.</em></h1><p>Print your teams, assemble the pitch and bring DERBY home.</p></section>
 <nav aria-label="Print components" id="navigation"></nav>
 <section class="workspace" aria-labelledby="view-title">
-<div class="workspace-heading"><div><p class="eyebrow">PRINT STUDIO</p><h2 id="view-title"></h2></div><button id="print-button" disabled>Print / Save PDF ↗</button></div>
+<div class="workspace-heading"><div><p class="eyebrow">PRINT STUDIO</p><h2 id="view-title"></h2></div><button id="print-button" disabled>Print / Save PDF <svg width="21" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="square" stroke-linejoin="arcs"><path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5"></path></svg></button></div>
 <form id="options">
+<label>Print language<select name="language"><option value="en">English · EN</option><option value="pt">Português · PT</option></select></label>
 <label>Paper<select name="paper"><option value="a3">A3 · more per sheet</option><option value="a4">A4 · home printer</option></select></label>
-<label class="deck-option">Sides<select name="sides"><option value="both">Fronts + backs · duplex</option><option value="front">Fronts only</option><option value="back">Backs only</option></select></label>
-<label class="deck-option">Duplex binding<select name="edge"><option value="long">Long edge</option><option value="short">Short edge</option></select></label>
-<label class="token-option" hidden>Substitution tokens per team<input name="subs" type="number" min="0" max="30" value="3"></label>
+<label class="duplex-option">Sides<select name="sides"><option value="both">Fronts + backs · duplex</option><option value="front">Fronts only</option><option value="back">Backs only</option></select></label>
+<label class="duplex-option">Duplex binding<select name="edge"><option value="long">Long edge</option><option value="short">Short edge</option></select></label>
+<label class="player-option">Front background<select name="background"><option value="stadium">Stadium</option><option value="plain">Plain · less ink</option></select></label>
+<label class="player-option check"><input name="nationality" type="checkbox" checked> Nationality on player backs</label>
+<label class="player-option check"><input name="deckName" type="checkbox" checked> Deck name on player backs</label>
+<label class="duel-option" hidden>Duel deck<select name="duelKind"><option value="all">Field + goal · 90 cards</option><option value="FIELD">Field · 50 cards</option><option value="GOAL">Goal · 40 cards</option></select></label>
 <label class="check"><input name="marks" type="checkbox" checked> Cut guides</label>
+<label class="board-option check" hidden><input name="benches" type="checkbox" checked> Coach + substitution areas · same sheet count</label>
+<label class="board-option check" hidden><input name="piles" type="checkbox"> Player decks + shared piles · same sheet count</label>
+<details id="coach-settings" hidden><summary>Coach nationalities</summary><p>Nationalities are prefilled. You can change them before printing. The final nine coaches are optional proposals for this print edition.</p><div id="coach-nationalities"></div></details>
 </form>
 <p id="status" role="status" aria-live="polite"></p>
 <aside class="instructions"><strong>Before you print</strong><p id="print-help"></p><p>Use 100% / Actual size, enable background graphics and disable browser headers and footers. Check the 50 mm ruler before cutting. Save as PDF through your browser’s print dialog.</p></aside>

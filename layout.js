@@ -14,8 +14,13 @@ export function reverseSheet(sheet, paper, edge) {
       : sheet[row * columns + columns - 1 - col];
   });
 }
-export function boardTiles(paper) {
+export function boardGeometry(benches = false, piles = false) {
+  const expanded = benches || piles;
+  return {width:380,height:expanded?480:310,fieldTop:expanded?100:0,fieldHeight:expanded?280:310,tileHeight:expanded?245:160,stepY:expanded?235:150};
+}
+export function boardTiles(paper, benches = false, piles = false) {
+  const {tileHeight,stepY}=boardGeometry(benches,piles);
   return paper === 'a4'
-    ? [{x:0,y:0},{x:185,y:0},{x:0,y:150},{x:185,y:150}].map(p => ({...p,width:195,height:160}))
-    : [{x:0,y:0,width:380,height:160},{x:0,y:150,width:380,height:160}];
+    ? [{x:0,y:0},{x:185,y:0},{x:0,y:stepY},{x:185,y:stepY}].map(p => ({...p,width:195,height:tileHeight}))
+    : [{x:0,y:0,width:380,height:tileHeight},{x:0,y:stepY,width:380,height:tileHeight}];
 }
