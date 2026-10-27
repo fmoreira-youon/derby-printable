@@ -1,3 +1,4 @@
+export const DERBY_STAR_PATH = 'm50 17 10 22 24 3-18 17 5 24-21-12-21 12 5-24-18-17 24-3Z';
 export const logo = (className = '') => `<img class="derby-logo ${className}" src="resources/derby-logo.png" alt="DERBY — The Card Game">`;
 
 // Scalable artwork following the supplied token reference: white double ring,
@@ -14,7 +15,7 @@ export function tokenArt(type, back = false) {
     const [x,y,size] = type === 'sub' ? [164,178,126] : [22,185,118];
     return `<div class="token reference-token"><img src="resources/token-reference.png" alt="${type==='sub'?'Substitution':'Ball'}" style="width:${313/size*25}mm;height:${330/size*25}mm;left:${-x/size*25}mm;top:${-y/size*25}mm"></div>`;
   }
-  const star = `<circle cx="50" cy="50" r="49" fill="#101a32"/><circle cx="50" cy="50" r="44" fill="none" stroke="#ffb800" stroke-width="2.3"/><path transform="translate(50 50) scale(.85) translate(-50 -50)" d="m50 17 10 22 24 3-18 17 5 24-21-12-21 12 5-24-18-17 24-3Z" fill="#ffb800"/>`;
+  const star = `<circle cx="50" cy="50" r="49" fill="#101a32"/><circle cx="50" cy="50" r="44" fill="none" stroke="#ffb800" stroke-width="2.3"/><path transform="translate(50 50) scale(.85) translate(-50 -50)" d="${DERBY_STAR_PATH}" fill="#ffb800"/>`;
   return `<div class="token ${type}-token"><svg viewBox="0 0 100 100" role="img" aria-label="${type==='sub'?'Substitution':type==='ball'?'Ball':'Derby star'}">${star}</svg></div>`;
 }
 export function matchTokens() {

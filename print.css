@@ -54,7 +54,7 @@
 .coach-nationality{display:flex;align-items:center;gap:2mm;color:#d8deec;font-size:7.2pt;font-weight:700}.coach-nationality .flag{position:static;width:7mm;height:7mm;border-radius:50%;object-fit:cover}
 #coach-settings{flex:1 0 100%;border-top:1px solid #ffffff20;padding-top:15px}#coach-settings summary{cursor:pointer;font-size:13px;color:#e8edf8}#coach-settings p{font-size:12px;line-height:1.5;color:#b5bfd5}#coach-nationalities{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}
 
-.collection-emblem .goal-icon{display:block;width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1)}
+.collection-emblem .goal-icon,.back-emblem .goal-icon{display:block;width:100%;height:100%;object-fit:contain;filter:brightness(0) invert(1)}
 /* Field artwork stays behind full-size card spaces. */
 .pitch-field{position:absolute;left:0;width:380mm;height:310mm;isolation:isolate}
 .pitch-markings{position:absolute;inset:0;width:100%;height:100%;color:white;opacity:.38;z-index:0;pointer-events:none}
@@ -82,3 +82,5 @@
 .without-piles .bench-token-row{grid-template-columns:repeat(5,25mm);gap:12mm}
 
 .board-sheet .assembly{margin:4mm auto}
+
+.back-emblem.special-emblem{color:#ffb800;opacity:.95}

@@ -1,7 +1,7 @@
 import { translate, triggerLabel } from './data/locales.js';
 import { DECK1_PLAYERS, DECK2_PLAYERS } from './data/decks.js';
 import { COACHES, DUELS, SPECIAL_CARDS } from './data/collections.js';
-import { logo, tokenArt, tokenOrder, tokenGridFor, fillTokenSheet } from './artwork.js';
+import { DERBY_STAR_PATH, logo, tokenArt, tokenOrder, tokenGridFor, fillTokenSheet } from './artwork.js';
 import { gridFor, paginate, reverseSheet, boardTiles, boardGeometry } from './layout.js';
 
 const views = {
@@ -102,6 +102,7 @@ function renderTokens(paper,sides,edge) {
 }
 const attributeNames={physicality:'Physical',technique:'Technique',pace:'Pace',tackle:'Tackling',mental:'Mental',finishing:'Shooting',overall:'Overall',exits:'Exits',handling:'Handling',reflexes:'Reflexes'};
 function collectionIcon(type) {
+  if(type==='special') return `<svg viewBox="10 10 80 80" aria-hidden="true"><path d="${DERBY_STAR_PATH}" fill="currentColor"/></svg>`;
   if(type==='goal') return '<img class="goal-icon" src="resources/goal.svg" alt="">';
   const shapes = {
     coach:'<rect x="6" y="4" width="20" height="25" rx="3"/><path d="M12 4V2h8v2M11 11h10M11 16h4M18 22l5-5M19 17h4v4"/><circle cx="12" cy="23" r="2"/>',
@@ -116,7 +117,7 @@ function collectionCard(item,type,back,rotate) {
   const label=type==='duel'?`${kind.toUpperCase()} DUEL`:type==='coach'?'COACH':'SPECIAL CARD';
   const action=escape(tr(item.action?.description||item.description||''));
   let body;
-  if(back) body=`<div class="collection-back-frame"></div>${type==='coach'?`<div class="back-emblem">${collectionIcon('coach')}</div>`:''}<div class="back-brand">${logo()}</div><span class="back-team">${tr(label)}</span>`;
+  if(back) body=`<div class="collection-back-frame"></div><div class="back-emblem ${type==='special'?'special-emblem':''}">${collectionIcon(kind)}</div><div class="back-brand">${logo()}</div><span class="back-team">${tr(label)}</span>`;
   else {
     const coachIndex=type==='coach'?COACHES.indexOf(item):-1;
     const nationality=coachIndex>=0 ? form.elements.namedItem(`coach-nationality-${coachIndex}`).value : '';
